@@ -64,6 +64,10 @@ AUTH_GOOGLE_SECRET=
 # https://discord.com/developers/applications
 AUTH_DISCORD_ID=
 AUTH_DISCORD_SECRET=
+
+# https://supabase.com/
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
 5. Inicie o servidor de desenvolvimento:
