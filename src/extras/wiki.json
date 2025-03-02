@@ -1,0 +1,14 @@
+{
+    "wiki": [
+        {
+            "name": "Stone Collector",
+            "description": "use to make ultimate stone as follows.",
+            "recipe": "Click in an iron block using any of the hammers",    
+            "image": "https://api.mcpedl.com/storage/submissions/194547/images/ultimate-stone-addon_2.jpeg",
+            "image2": "https://api.mcpedl.com/storage/submissions/194547/images/ultimate-stone-addon_3.jpeg",
+            "addon": "Ultimate Stone",
+            "addonlink": "/addon/ultimate-stone",
+            "link": "/wiki/stone-collector"
+        }
+    ]
+}

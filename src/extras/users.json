@@ -1,0 +1,25 @@
+{
+    "users": [
+    {
+    "username": "minecodebr",
+    "password": "12345678",
+    "description": "I create addons for minecraft bedrock",
+    "image": "https://yt3.googleusercontent.com/BPBpb1-8uwZnDOyTPghj6szZWgK7aUbloZO6W0LJ4MxcckNbl66IgY2CR0fu355X6pbDzoV1DFI=s160-c-k-c0x00ffffff-no-rj",
+    "link": "/users/minecodebr"
+    }, 
+    {
+    "username": "Blayy",
+    "password": "k123",
+    "description": "Proggamer, Artist & Designer",
+    "image": "https://yt3.ggpht.com/n7xI6T3gdPT20eVJAE_P1xpW70N0XCL5hxIx7u0upi4WwH_Eg3M8ILdT95yRvxHtwVrqpDM6=s108-c-k-c0x00ffffff-no-rj",
+    "link": "/users/blayy"
+    },
+    {
+        "username": "Spyei",
+        "password": "caio123",
+        "description": "oi eu sou legal",
+        "image": "https://yt3.googleusercontent.com/Q1SkPK_mC_w-ul8RVTuNBYODz0QA5Efey8ZDYHHFJCPtgA1zs7DoiHXKPqNhVSScaQiNW9EF=s160-c-k-c0x00ffffff-no-rj",
+        "link": "/users/spyei"
+        }
+    ]
+}
