@@ -44,7 +44,7 @@ Siga os passos abaixo para rodar o projeto localmente:
 
 1. Clone o repositório:
    ```sh
-   git clone https://github.com/rock-mine/rock-mine
+   git clone https://github.com/rock-mine/website
    ```
 2. Acesse a pasta do projeto:
    ```sh
