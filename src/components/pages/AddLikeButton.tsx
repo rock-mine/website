@@ -28,7 +28,10 @@ export default function AddLikeButton({
     <Button
       isActive={vote}
       onClick={() => {
-        if (!actualSession?.user.likes_posts?.includes(actualAddon.id)) {
+        if (
+          session?.user.name &&
+          !actualSession?.user.likes_posts?.includes(actualAddon.id)
+        ) {
           setVote(true);
           addon.setAddonState({ likes: actualAddon.likes + 1 }, actualAddon.id);
           user.updateUser(actualSession?.user.id as string, {
@@ -49,7 +52,7 @@ export default function AddLikeButton({
 
             return v;
           });
-        } else {
+        } else if (session?.user.name && actualSession?.user?.likes_posts) {
           setVote(false);
           addon.setAddonState({ likes: actualAddon.likes - 1 }, actualAddon.id);
           user.updateUser(actualSession?.user.id as string, {
