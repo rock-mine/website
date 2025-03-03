@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Addon, User } from "@/types";
+import type { Addon } from "@/types";
 import { decode } from "base64-arraybuffer";
 
 export default function Main(supabase: SupabaseClient) {

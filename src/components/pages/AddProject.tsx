@@ -18,7 +18,7 @@ import Button from "src/components/Button";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { addon } from "src/utils/db";
-import type { User, Addon } from "@/types";
+import type { Addon } from "@/types";
 import type { Session } from "next-auth";
 import MarkdownRenderer from "src/components/MarkdownRenderer";
 

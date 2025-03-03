@@ -1,6 +1,10 @@
+/*
+@param Todos of plugins: remark-gfm, rehype-raw e rehype-highlight
+*/
+
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm"; //remark-gfm rehype-raw rehype-highlight
+import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
@@ -66,6 +70,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
         ),
         img: ({ ...props }) => (
           <img
+            alt="Markdown image"
             className="max-w-full h-auto rounded-md my-4 justify-center"
             {...props}
           />

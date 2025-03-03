@@ -2,16 +2,11 @@ import Button from "src/components/Button";
 import { addon as db, user } from "src/utils/db";
 import Image from "next/image";
 import AddonControls from "@/components/AddonControls";
-import { AlarmClock, Clock } from "lucide-react";
-import type { Metadata, ResolvingMetadata } from "next";
+import { AlarmClock } from "lucide-react";
+import type { Metadata } from "next";
 import moment from "moment";
 import { auth } from "@/utils/auth";
 import AddLikeButton from "@/components/pages/AddLikeButton";
-
-type Props = {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-};
 
 export async function generateMetadata({
   params,

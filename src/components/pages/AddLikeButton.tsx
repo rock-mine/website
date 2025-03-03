@@ -10,7 +10,7 @@ import Button from "../Button";
 import Image from "next/image";
 import { addon, user } from "@/utils/db";
 import type { Addon } from "@/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function AddLikeButton({
   session,
@@ -19,14 +19,10 @@ export default function AddLikeButton({
   actualAddon: Addon;
   session: Session | null;
 }) {
-  const [vote, setVote] = useState(false);
+  const [vote, setVote] = useState(
+    session?.user.likes_posts?.includes(actualAddon.id)
+  );
   const [actualSession, setSession] = useState(session);
-
-  useEffect(() => {
-    if (session?.user.likes_posts?.includes(actualAddon.id)) {
-      setVote(true);
-    }
-  }, []);
 
   return (
     <Button
