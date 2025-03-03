@@ -7,6 +7,7 @@ export type User = {
   display_name?: string;
   role?: string;
   email?: string;
+  likes_posts?: string[];
 };
 
 /*
@@ -17,6 +18,7 @@ export type User = {
 */
 
 export type Addon = {
+  data_post: number;
   id: string;
   name: string;
   description: string;

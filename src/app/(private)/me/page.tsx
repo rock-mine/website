@@ -3,6 +3,12 @@ import Image from "next/image";
 import { auth } from "@/utils/auth";
 import UserState from "@/components/UserState";
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Your profile",
+  icons: "/logo.jpg",
+};
 
 export default async function Page() {
   const session = await auth();

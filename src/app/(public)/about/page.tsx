@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 // grid grid-cols-[800px_800px]
+
+export const metadata: Metadata = {
+  title: "About us",
+  icons: "/logo.jpg",
+};
+
 export default function AboutPage() {
   return (
     <div className="flex flex-col w-full items-center justify-center gap-5 mt-10 md:mt-0">

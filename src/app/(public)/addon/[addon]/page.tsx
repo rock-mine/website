@@ -3,12 +3,37 @@ import { addon as db, user } from "src/utils/db";
 import Image from "next/image";
 import AddonControls from "@/components/AddonControls";
 import { AlarmClock, Clock } from "lucide-react";
+import type { Metadata, ResolvingMetadata } from "next";
+import moment from "moment";
+import { auth } from "@/utils/auth";
+import AddLikeButton from "@/components/pages/AddLikeButton";
+
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ addon: string }>;
+}): Promise<Metadata> {
+  // read route params
+  const { addon } = await params;
+  const addonData = await db.getById(addon);
+
+  return {
+    title: addonData.name,
+    icons: "/logo.jpg",
+  };
+}
 
 export default async function Page({
   params,
 }: {
   params: Promise<{ addon: string }>;
 }) {
+  const session = await auth();
   const actualAddon = (await params).addon;
   const addon = await db.getById(actualAddon);
   const author = await user.findUser({ id: addon.author as string });
@@ -54,7 +79,9 @@ export default async function Page({
             </h1>
             <div className="flex items-center gap-2 p-2">
               <AlarmClock />
-              <span className="text-white text-sm">09/11/2001</span>
+              <span className="text-white text-sm">
+                {moment(Number(addon.data_post)).format("L")}
+              </span>
               <Image
                 width={100}
                 height={100}
@@ -62,7 +89,7 @@ export default async function Page({
                 className="w-5 h-5 object-contain invert"
                 alt="Icon"
               />
-              <span className="text-white text-sm">499</span>
+              <span className="text-white text-sm">{addon.likes}</span>
               <Image
                 width={100}
                 height={100}
@@ -101,16 +128,7 @@ export default async function Page({
               />
               <p>Home</p>
             </Button>
-            <Button className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm">
-              <Image
-                width={100}
-                height={100}
-                src="/icons/likes.svg"
-                className="w-5 h-5 invert"
-                alt="Like"
-              />
-              <p>Vote Like</p>
-            </Button>
+            <AddLikeButton session={session} actualAddon={addon} />
             <Button className="flex items-center justify-center gap-2 px-3 rounded-lg text-sm">
               <Image
                 width={100}

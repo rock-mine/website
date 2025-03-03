@@ -34,6 +34,7 @@ export default function Main(supabase: SupabaseClient) {
         .from("addons")
         .insert({
           ...baseAddon,
+          data_post: Date.now(),
           logo: `https://gpvzyqfhcdfuaksujvwo.supabase.co/storage/v1/object/public/logos//${addon.id}.png`,
           author,
         })
@@ -44,6 +45,11 @@ export default function Main(supabase: SupabaseClient) {
       console.log(error);
 
       return data;
+    },
+    async setAddonState(data: object, id: string) {
+      const { error } = await supabase.from("addons").update(data).eq("id", id);
+
+      return error;
     },
   };
 }
