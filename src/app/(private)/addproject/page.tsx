@@ -11,5 +11,6 @@ export const metadata: Metadata = {
 export default async function AddProjectPage() {
   const session = await auth();
  // if (!session?.user.role?.includes("creator")) redirect("/");
+ //pega commit fdp
   return <AddProject session={session} />;
 }
