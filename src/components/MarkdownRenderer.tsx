@@ -1,23 +1,58 @@
-/*
-@param Todos of plugins: remark-gfm, rehype-raw e rehype-highlight
-*/
-
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
+import rehypeSanitize from "rehype-sanitize";
 import "highlight.js/styles/github-dark.css";
 
 interface MarkdownRendererProps {
   content: string;
 }
 
+
+const isValidYouTubeUrl = (url: string): boolean => {
+  const youtubeDomains = [
+    "www.youtube.com",
+    "youtube.com",
+    "youtu.be",
+    "www.youtu.be",
+    "open.spotify.com",
+  ];
+  try {
+    const parsedUrl = new URL(url);
+    return youtubeDomains.includes(parsedUrl.hostname);
+  } catch (e) {
+    return false; 
+  }
+};
+
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
+  const sanitizeSchema = {
+    tagNames: [
+      "h1", "h2", "h3", "h4", "h5", "h6",
+      "p", "a", "ul", "ol", "li",
+      "code", "pre", "blockquote", "img",
+      "table", "th", "td", "tr", "br",
+      "strong", "em", "hr", "div", "span",
+      "iframe", 
+    ],
+    attributes: {
+      "*": ["className", "style"],
+      a: ["href", "target", "rel"],
+      img: ["src", "alt", "title"],
+      iframe: ["src", "title", "width", "height", "allow", "sandbox"], 
+    },
+  };
+
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeRaw, rehypeHighlight]}
+      rehypePlugins={[
+        rehypeRaw,
+        [rehypeSanitize, sanitizeSchema],
+        rehypeHighlight,
+      ]}
       components={{
         h1: ({ ...props }) => (
           <h1 className="text-4xl font-bold my-6" {...props} />
@@ -87,6 +122,22 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
         td: ({ ...props }) => (
           <td className="border border-gray-400 px-4 py-2" {...props} />
         ),
+        // Componente iframe personalizado
+        iframe: ({ src, title, ...props }) => {
+          if (src && isValidYouTubeUrl(src)) {
+            return (
+              <iframe
+                src={src}
+                title={title}
+                sandbox="allow-scripts allow-same-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                className="w-full h-64 border-none rounded-md my-4"
+                {...props}
+              />
+            );
+          }
+          return null; // Não renderiza iframes de fontes não autorizadas
+        },
       }}
       skipHtml={false}
     >

@@ -1,4 +1,4 @@
-
+import tags from "@/tags.json";
 export default function SearchBar({ query, setQuery, selectedTags, setSelectedTags }: {
   query: string;
   setQuery: (value: string) => void;
@@ -18,7 +18,7 @@ export default function SearchBar({ query, setQuery, selectedTags, setSelectedTa
     );
   };
 
-  const tags = ["survival", "items", "utility", "mobs", "hard", "difficulty", "magic", "tools", "weapons", "blocks"];
+
 
   return (
     <div className="w-full flex flex-col items-center justify-center">

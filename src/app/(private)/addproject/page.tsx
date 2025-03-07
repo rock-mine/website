@@ -10,6 +10,6 @@ export const metadata: Metadata = {
 
 export default async function AddProjectPage() {
   const session = await auth();
-  if (!session?.user.role?.includes("creator")) redirect("/");
+ // if (!session?.user.role?.includes("creator")) redirect("/");
   return <AddProject session={session} />;
 }

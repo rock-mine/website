@@ -52,7 +52,7 @@ export default function AddonControls({
         <Button
           className="flex items-center justify-center gap-2 px-3 leading-none w-40"
           isActive={actualPage === "wiki"}
-          onClick={() => router.push(`${actualAddon}?page=wiki`)}
+          onClick={() => router.push(`${actualAddon}?page=images`)}
         >
           <Image
             width={100}

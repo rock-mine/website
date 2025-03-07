@@ -13,7 +13,15 @@ import {
   CodeIcon,
   LinkIcon,
   ImageIcon,
-} from "lucide-react"; // Adicionei ícones para novas formatações
+  Heading1,
+  Heading2,
+  Heading3,
+  List,
+  ListOrdered,
+  Quote,
+  PlusIcon,
+  YoutubeIcon, // Ícone para o botão de iframe do YouTube
+} from "lucide-react";
 import Button from "src/components/Button";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
@@ -21,12 +29,15 @@ import { addon } from "src/utils/db";
 import type { Addon } from "@/types";
 import type { Session } from "next-auth";
 import MarkdownRenderer from "src/components/MarkdownRenderer";
+import tags from "@/tags.json";
 
 type AddonBaseConfig = {
   name?: string;
   short_description?: string;
   description?: string;
   logo?: string;
+  tags?: string[];
+  downloads?: { name: string; link: string }[];
 };
 
 export default function AddProject({ session }: { session: Session | null }) {
@@ -34,7 +45,9 @@ export default function AddProject({ session }: { session: Session | null }) {
   const [viewErro, setViewErro] = useState(false);
   const [viewSucessSend, setSendSucess] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null); // Referência para o textarea
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [downloads, setDownloads] = useState<{ name: string; link: string }[]>([]);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { openFilePicker, filesContent } = useFilePicker({
     readAs: "DataURL",
@@ -49,7 +62,52 @@ export default function AddProject({ session }: { session: Session | null }) {
     },
   });
 
-  /// Função para aplicar formatação ao texto selecionado
+  // Função para validar URLs do YouTube
+  const isValidYouTubeUrl = (url: string): boolean => {
+    const youtubeDomains = [
+      "www.youtube.com",
+      "youtube.com",
+      "youtu.be",
+      "www.youtu.be",
+    ];
+    try {
+      const parsedUrl = new URL(url);
+      return youtubeDomains.includes(parsedUrl.hostname);
+    } catch (e) {
+      return false; // URL inválida
+    }
+  };
+
+  const convertToYouTubeEmbedUrl = (url: string): string | null => {
+    try {
+      const parsedUrl = new URL(url);
+      const videoId = parsedUrl.searchParams.get("v"); // Extrai o ID do vídeo
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`; // Retorna a URL de embed
+      } else if (parsedUrl.hostname.includes("youtu.be")) {
+        // Para URLs encurtadas (youtu.be)
+        return `https://www.youtube.com/embed${parsedUrl.pathname}`;
+      }
+      return null; // URL inválida
+    } catch (e) {
+      return null; // URL inválida
+    }
+  };
+  
+const addYouTubeIframe = () => {
+  const url = prompt("Digite a URL do vídeo do YouTube:");
+  if (url) {
+    const embedUrl = convertToYouTubeEmbedUrl(url); // Converte para embed
+    if (embedUrl) {
+      const iframeMarkdown = `<iframe src="${embedUrl}" title="YouTube video player" sandbox="allow-scripts allow-same-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" class="w-full h-64 border-none rounded-md my-4"></iframe>`;
+      applyFormatting(iframeMarkdown, "");
+    } else {
+      alert("Por favor, insira uma URL válida do YouTube.");
+    }
+  }
+};
+
+  // Função para aplicar formatação
   const applyFormatting = (prefix: string, suffix: string = prefix) => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -58,26 +116,23 @@ export default function AddProject({ session }: { session: Session | null }) {
     const end = textarea.selectionEnd;
     const text = data?.description || "";
 
-    // Texto antes da seleção + texto formatado + texto após a seleção
     const newText =
       text.substring(0, start) +
       `${prefix}${text.substring(start, end)}${suffix}` +
       text.substring(end);
 
-    // Atualiza o estado com o novo texto formatado
     setData((baseData) => ({
       ...baseData,
       description: newText,
     }));
 
-    // Reposiciona o cursor após a formatação
     setTimeout(() => {
       textarea.focus();
       textarea.setSelectionRange(start + prefix.length, end + prefix.length);
     }, 0);
   };
 
-  // Função para adicionar um link
+  // Funções de formatação
   const addLink = () => {
     const url = prompt("Digite a URL:");
     if (url) {
@@ -85,13 +140,48 @@ export default function AddProject({ session }: { session: Session | null }) {
     }
   };
 
-  // Função para adicionar uma imagem
   const addImage = () => {
     const url = prompt("Digite a URL da imagem:");
     if (url) {
       const altText = prompt("Digite o texto alternativo (alt):");
       applyFormatting(`![${altText || "imagem"}]`, `(${url})`);
     }
+  };
+
+  const addHeading = (level: number) => {
+    const prefix = "#".repeat(level) + " ";
+    applyFormatting(prefix, "");
+  };
+
+  const addList = (ordered: boolean) => {
+    const prefix = ordered ? "1. " : "- ";
+    applyFormatting(prefix, "");
+  };
+
+  const addBlockquote = () => {
+    applyFormatting("> ", "");
+  };
+
+  const addCodeBlock = () => {
+    applyFormatting("```\n", "\n```");
+  };
+
+  const handleTagChange = (tag: string) => {
+    setSelectedTags((prevTags) =>
+      prevTags.includes(tag)
+        ? prevTags.filter((t) => t !== tag)
+        : [...prevTags, tag]
+    );
+  };
+
+  const handleAddDownload = () => {
+    setDownloads((prevDownloads) => [...prevDownloads, { name: "", link: "" }]);
+  };
+
+  const handleRemoveDownload = (index: number) => {
+    setDownloads((prevDownloads) =>
+      prevDownloads.filter((_, i) => i !== index)
+    );
   };
 
   useEffect(() => {
@@ -207,47 +297,111 @@ export default function AddProject({ session }: { session: Session | null }) {
                       : ""
                   }`}
                 >
+                  {/* Botões de formatação */}
                   <button
-                    className="p-1 bg-bluehover/80"
-                    onClick={() => applyFormatting("**")} // Negrito
+                    className="p-1 hover:bg-bluehover/80"
+                    onClick={() => applyFormatting("**")}
+                    title="Negrito"
                   >
                     <Bold />
                   </button>
                   <button
                     className="p-1 hover:bg-bluehover/80"
-                    onClick={() => applyFormatting("*")} // Itálico
+                    onClick={() => applyFormatting("*")}
+                    title="Itálico"
                   >
                     <Italic />
                   </button>
                   <button
                     className="p-1 hover:bg-bluehover/80"
-                    onClick={() => applyFormatting("<u>", "</u>")} // Sublinhado
+                    onClick={() => applyFormatting("<u>", "</u>")}
+                    title="Sublinhado"
                   >
                     <Underline />
                   </button>
                   <button
                     className="p-1 hover:bg-bluehover/80"
-                    onClick={() => applyFormatting("~~")} // Tachado
+                    onClick={() => applyFormatting("~~")}
+                    title="Tachado"
                   >
                     <Strikethrough />
                   </button>
                   <button
                     className="p-1 hover:bg-bluehover/80"
-                    onClick={() => applyFormatting("`")} // Código inline
+                    onClick={() => applyFormatting("`")}
+                    title="Código inline"
                   >
                     <CodeIcon />
                   </button>
                   <button
                     className="p-1 hover:bg-bluehover/80"
-                    onClick={addLink} // Link
+                    onClick={addLink}
+                    title="Adicionar link"
                   >
                     <LinkIcon />
                   </button>
                   <button
                     className="p-1 hover:bg-bluehover/80"
-                    onClick={addImage} // Imagem
+                    onClick={addImage}
+                    title="Adicionar imagem"
                   >
                     <ImageIcon />
+                  </button>
+                  <button
+                    className="p-1 hover:bg-bluehover/80"
+                    onClick={() => addHeading(1)}
+                    title="Título 1"
+                  >
+                    <Heading1 />
+                  </button>
+                  <button
+                    className="p-1 hover:bg-bluehover/80"
+                    onClick={() => addHeading(2)}
+                    title="Título 2"
+                  >
+                    <Heading2 />
+                  </button>
+                  <button
+                    className="p-1 hover:bg-bluehover/80"
+                    onClick={() => addHeading(3)}
+                    title="Título 3"
+                  >
+                    <Heading3 />
+                  </button>
+                  <button
+                    className="p-1 hover:bg-bluehover/80"
+                    onClick={() => addList(false)}
+                    title="Lista não ordenada"
+                  >
+                    <List />
+                  </button>
+                  <button
+                    className="p-1 hover:bg-bluehover/80"
+                    onClick={() => addList(true)}
+                    title="Lista ordenada"
+                  >
+                    <ListOrdered />
+                  </button>
+                  <button
+                    className="p-1 hover:bg-bluehover/80"
+                    onClick={addBlockquote}
+                    title="Citação"
+                  >
+                    <Quote />
+                  </button>
+                  <button
+                    className="p-1 hover:bg-bluehover/80"
+                    onClick={addCodeBlock}
+                    title="Bloco de código"
+                  >
+                    <CodeIcon />
+                  </button>
+                  <button
+                    className="p-1 hover:bg-bluehover/80"
+                    onClick={addYouTubeIframe}
+                    title="Inserir vídeo do YouTube"
+                  >
+                    <YoutubeIcon />
                   </button>
                 </div>
                 <textarea
@@ -269,6 +423,68 @@ export default function AddProject({ session }: { session: Session | null }) {
             )}
           </div>
 
+          {/* Seleção de Tags */}
+          <div className="w-full max-w-2xl space-y-4">
+            <h1 className="text-xl font-bold">Tags</h1>
+            <div className="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => handleTagChange(tag)}
+                  className={`px-4 py-2 rounded-full ${
+                    selectedTags.includes(tag)
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200 text-black"
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Links de Download */}
+          <div className="w-full max-w-2xl space-y-4">
+            <h1 className="text-xl font-bold">Download Links</h1>
+            <div className="space-y-2">
+              {downloads.map((download, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <Input
+                    value={download.name}
+                    onChange={(e) => {
+                      const newDownloads = [...downloads];
+                      newDownloads[index].name = e.target.value;
+                      setDownloads(newDownloads);
+                    }}
+                    placeholder="Download Name"
+                  />
+                  <Input
+                    value={download.link}
+                    onChange={(e) => {
+                      const newDownloads = [...downloads];
+                      newDownloads[index].link = e.target.value;
+                      setDownloads(newDownloads);
+                    }}
+                    placeholder="Download Link"
+                  />
+                  <Button
+                    onClick={() => handleRemoveDownload(index)}
+                    className="bg-red-500/30 hover:bg-red-600/30"
+                  >
+                    Remove
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <Button
+              onClick={handleAddDownload}
+              className="flex items-center space-x-2 bg-blue-500/30 hover:bg-blue-600/30"
+            >
+              <PlusIcon size={16} />
+              <span>Add Download Link</span>
+            </Button>
+          </div>
+
           {/* Botão de Envio */}
           <div className="w-full max-w-2xl">
             <Button
@@ -285,8 +501,9 @@ export default function AddProject({ session }: { session: Session | null }) {
                       ...data,
                       id: data.name.toLowerCase().replace(/ /g, ""),
                       likes: 0,
-                      tags: "",
+                      tags: selectedTags.join(", "),
                       status: 100,
+                      downloads: downloads,
                     } as Addon,
                     session?.user.email as string
                   );
