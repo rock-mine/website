@@ -51,7 +51,7 @@ export default function UserState({ session }: { session: Session | null }) {
           </div>
         )}
       </div>
-      <div className="absolute top-30 -left-10 w-[600px] md:relative md:mx-auto md:top-2 md:h-[200px] rounded-md bg-[#0e0d11] md:w-[90%]">
+      <div className="absolute top-30 -left-10 w-[600px] md:relative md:mx-auto md:top-2 md:h-[200px] rounded-md bg-[#0e0d11] md:w-[90%] border-2 border-white/20">
         <textarea
           className="resize-none outline-none w-full h-full p-4"
           defaultValue={session?.user?.bio}
@@ -60,14 +60,14 @@ export default function UserState({ session }: { session: Session | null }) {
       </div>
       <div className="relative flex mt-30 -left-[20%] md:mt-5 space-x-8 w-full md:left-0 md:w-[800px]">
         <button
-          className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-4 border-blueborder"
+          className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-2 border-blueborder"
           onClick={() => signOut()}
           type="submit"
         >
           Log Out
         </button>
         <button
-          className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-4 border-blueborder"
+          className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-2 border-blueborder"
           onClick={() => {
             user.updateUser(session?.user?.id as string, {
               bio,
@@ -79,7 +79,7 @@ export default function UserState({ session }: { session: Session | null }) {
         </button>
         <Link
               href="/addproject"
-              className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-4 border-blueborder"
+              className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-2 border-blueborder"
             >
              Create Project +
             </Link>

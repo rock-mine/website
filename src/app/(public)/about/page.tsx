@@ -16,12 +16,12 @@ export default function AboutPage() {
         <title>About Us</title>
         <link rel="icon" href="/logo.jpg" type="image/x-icon" />
       </Head>
-      <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[#16131B] to-[#1E2A2F] text-white">
+      <main className="flex flex-col items-center justify-center mt-8 min-h-screen bg-gradient-to-b from-[#16131B] to-[#1E2A2F] text-white">
         <h1 className="text-6xl font-bold mt-10 mb-8 text-gray-500">
           About Us
         </h1>
 
-        <div className="flex flex-col md:grid md:grid-cols-[800px_800px] items-center justify-center gap-8 p-4">
+        <div className="flex flex-col md:grid md:grid-cols-[400px_400px] items-center justify-center gap-8 p-4">
           <div className="flex flex-col items-center bg-black/40 p-6 rounded-lg shadow-lg hover:shadow-hovershadow transition-shadow">
             <Image
               width={100}
@@ -33,7 +33,7 @@ export default function AboutPage() {
             <h2 className="text-2xl font-bold mt-4 text-bluetext">Blayy</h2>
             <p className="mt-2 text-gray-400 text-center">
               Desenvolvedor Front-end apaixonado por criar interfaces intuitivas
-              e responsivas.
+              e responsivas. 
             </p>
             <Link
               href="https://github.com/blayy"

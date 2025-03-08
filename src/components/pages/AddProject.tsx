@@ -446,11 +446,7 @@ const addYouTubeIframe = () => {
                 <button
                   key={tag}
                   onClick={() => handleTagChange(tag)}
-                  className={`px-4 py-2 rounded-full ${
-                    selectedTags.includes(tag)
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200 text-black"
-                  }`}
+                  className={`px-3 py-1 border-blueborder border-4 ${selectedTags.includes(tag) ? "bg-blueselected text-bluetext" : "bg-bluebg text-bluetext hover:bg-bluehover"}`}
                 >
                   {tag}
                 </button>
@@ -482,22 +478,23 @@ const addYouTubeIframe = () => {
                     }}
                     placeholder="Download Link"
                   />
-                  <Button
+                  <button
                     onClick={() => handleRemoveDownload(index)}
-                    className="bg-red-500/30 hover:bg-red-600/30"
+                    className="bg-black/30 border-2 border-bluetext hover:bg-red-600/30 rounded-md text-white px-2 py-2"
                   >
                     Remove
-                  </Button>
+                  </button>
                 </div>
               ))}
             </div>
-            <Button
+            <button
               onClick={handleAddDownload}
-              className="flex items-center space-x-2 bg-blue-500/30 hover:bg-blue-600/30"
+              className="flex items-center justify-center space-x-2 bg-black/30 border-2 border-bluetext hover:bg-bluehover/40 rounded-md text-white px-1 py-1"
             >
-              <PlusIcon size={16} />
+            
               <span>Add Download Link</span>
-            </Button>
+              <PlusIcon size={16} />
+            </button>
           </div>
 
           {/* Botão de Envio */}
