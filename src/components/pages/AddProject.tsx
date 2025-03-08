@@ -1,6 +1,7 @@
 "use client";
 import Input from "src/components/Input";
 import { useFilePicker } from "use-file-picker";
+import Link from "next/link";
 import {
   Bold,
   Italic,
@@ -20,6 +21,7 @@ import {
   ListOrdered,
   Quote,
   PlusIcon,
+  TriangleAlert,
   YoutubeIcon, // Ícone para o botão de iframe do YouTube
 } from "lucide-react";
 import Button from "src/components/Button";
@@ -200,7 +202,20 @@ const addYouTubeIframe = () => {
       ) : (
         <div className="flex flex-col items-center justify-center p-4 space-y-8">
           {/* Título e Descrição Curta */}
+          <div className="flex items-center w-full justify-center">
+            <Link
+              href="/tutorial"
+              className="text-blueborder hover:text-bluetext bg-gray-500/5 transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md"
+            >
+             <div className="flex items-center gap-2">
+  <span>Need Help? Click here to see tutorial</span>
+  <TriangleAlert />
+</div>
+            </Link>
+            </div>
           <div className="w-full max-w-2xl space-y-4">
+            
+       
             <h1 className="text-xl font-bold">Title</h1>
             <Input
               onChange={(e) => {

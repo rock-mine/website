@@ -6,6 +6,9 @@ import { user } from "@/utils/db";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
 
+import { link } from "fs";
+import  Link  from "next/link";
+
 export default function UserState({ session }: { session: Session | null }) {
   const [displayName, setDisplayName] = useState<string>(
     session?.user?.display_name as string
@@ -55,16 +58,16 @@ export default function UserState({ session }: { session: Session | null }) {
           onChange={(e) => setBio(e.target.value)}
         />
       </div>
-      <div className="relative flex mt-30 -left-[20%] md:mt-5 space-x-8 w-full md:left-0 md:w-[400px]">
-        <Button
-          className="w-20 h-12 md:w-10"
+      <div className="relative flex mt-30 -left-[20%] md:mt-5 space-x-8 w-full md:left-0 md:w-[800px]">
+        <button
+          className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-4 border-blueborder"
           onClick={() => signOut()}
           type="submit"
         >
           Log Out
-        </Button>
-        <Button
-          className="w-30 h-12"
+        </button>
+        <button
+          className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-4 border-blueborder"
           onClick={() => {
             user.updateUser(session?.user?.id as string, {
               bio,
@@ -73,7 +76,16 @@ export default function UserState({ session }: { session: Session | null }) {
           }}
         >
           Save changes
-        </Button>
+        </button>
+        <Link
+              href="/addproject"
+              className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-4 border-blueborder"
+            >
+             Create Project +
+            </Link>
+        <div className="flex-shrink-0">
+      
+          </div>
       </div>
     </div>
   );

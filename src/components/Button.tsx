@@ -18,7 +18,7 @@ export default function Button({ className, ...props }: ButtonProps) {
       href={props.href as string}
       className={`${
         props.isActive || props.isactive ? "bg-blueselected" : ""
-      } hover:shadow-hovershadow shadow-blueshadow shadow-xl hover:text-bluetext transtion-colors duration-300 bg-black/20 border-4 border-blueborder bg-bluebg text-center p-2 px-4 font-bold flex flex-grow justify-center items-center ${className}`}
+      } hover:shadow-hovershadow shadow-blueshadow shadow-xl hover:text-bluetext  transtion-colors duration-300 bg-black/20 border-4 border-blueborder bg-bluebg text-center p-2 px-4 font-bold flex flex-grow justify-center items-center ${className}`}
     >
       {props.children || props.text}
     </Link>
@@ -27,7 +27,7 @@ export default function Button({ className, ...props }: ButtonProps) {
       onClick={() => (props.onClick ? props.onClick : null)}
       className={`${
         props.isActive || props.isactive ? "bg-blueselected" : ""
-      } space-x-2 hover:shadow-hovershadow shadow-blueshadow shadow-xl hover:text-bluetext transtion-colors duration-300 border-4 border-blueborder bg-black/20 text-center p-2 px-4 font-bold flex flex-grow justify-center items-center ${className}`}
+      } space-x-2 hover:shadow-hovershadow shadow-blueshadow shadow-xl hover:text-bluetext  transtion-colors duration-300 border-4 border-blueborder bg-black/20 text-center p-2 px-4 font-bold flex flex-grow justify-center items-center ${className}`}
       {...props}
     />
   );
