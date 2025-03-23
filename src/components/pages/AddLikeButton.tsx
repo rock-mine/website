@@ -22,19 +22,19 @@ export default function AddLikeButton({
   const [vote, setVote] = useState(
     session?.user.likes_posts?.includes(actualAddon.id)
   );
-  const [actualSession, setSession] = useState(session);
+  const [like, setLike] = useState(actualAddon.likes);
 
   return (
     <Button
       isActive={vote}
       onClick={() => {
-        if (
-          session?.user.name &&
-          !actualSession?.user.likes_posts?.includes(actualAddon.id)
-        ) {
+        if (!session?.user?.likes_posts) return;
+        if (!vote && !session?.user.likes_posts?.includes(actualAddon.id)) {
           setVote(true);
-          addon.setAddonState({ likes: actualAddon.likes + 1 }, actualAddon.id);
-          user.updateUser(actualSession?.user.id as string, {
+          addon.setAddonState({ likes: like + 1 }, actualAddon.id);
+          setLike(like + 1);
+
+          user.updateUser(session?.user.id as string, {
             likes_posts: [
               ...(Array.isArray(session?.user?.likes_posts)
                 ? session?.user?.likes_posts
@@ -42,33 +42,16 @@ export default function AddLikeButton({
               actualAddon.id,
             ],
           });
-          setSession((v) => {
-            Object(v?.user).likes_posts = [
-              ...(Array.isArray(session?.user?.likes_posts)
-                ? session?.user?.likes_posts
-                : []),
-              actualAddon.id,
-            ];
-
-            return v;
-          });
-        } else if (session?.user.name && actualSession?.user?.likes_posts) {
+        } else {
           setVote(false);
-          addon.setAddonState({ likes: actualAddon.likes - 1 }, actualAddon.id);
-          user.updateUser(actualSession?.user.id as string, {
-            likes_posts: actualSession.user.likes_posts.filter(
+
+          addon.setAddonState({ likes: like - 1 }, actualAddon.id);
+          setLike(like - 1);
+          user.updateUser(session?.user.id as string, {
+            likes_posts: session.user.likes_posts.filter(
               (v) => !v.includes(actualAddon.id)
             ),
           });
-          if (actualSession?.user?.likes_posts)
-            setSession((v) => {
-              Object(v?.user).likes_posts =
-                actualSession?.user?.likes_posts?.filter(
-                  (v) => !v.includes(actualAddon.id)
-                );
-
-              return v;
-            });
         }
       }}
       className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm"

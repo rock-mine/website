@@ -1,13 +1,10 @@
 "use client";
 import type { Session } from "next-auth";
 import { useState } from "react";
-import Button from "./Button";
 import { user } from "@/utils/db";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
-
-import { link } from "fs";
-import  Link  from "next/link";
+import Link from "next/link";
 
 export default function UserState({ session }: { session: Session | null }) {
   const [displayName, setDisplayName] = useState<string>(
@@ -51,7 +48,7 @@ export default function UserState({ session }: { session: Session | null }) {
           </div>
         )}
       </div>
-      <div className="absolute top-30 -left-10 w-[600px] md:relative md:mx-auto md:top-2 md:h-[200px] rounded-md bg-[#0e0d11] md:w-[90%] border-2 border-white/20">
+      <div className="absolute top-30 -left-10 max-w md:relative md:mx-auto md:top-2 md:h-[200px] rounded-md bg-[#0e0d11] md:w-[90%] border-2 border-white/20">
         <textarea
           className="resize-none outline-none w-full h-full p-4"
           defaultValue={session?.user?.bio}
@@ -78,14 +75,12 @@ export default function UserState({ session }: { session: Session | null }) {
           Save changes
         </button>
         <Link
-              href="/addproject"
-              className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-2 border-blueborder"
-            >
-             Create Project +
-            </Link>
-        <div className="flex-shrink-0">
-      
-          </div>
+          href="/addproject"
+          className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-2 border-blueborder"
+        >
+          Create Project +
+        </Link>
+        <div className="flex-shrink-0"></div>
       </div>
     </div>
   );

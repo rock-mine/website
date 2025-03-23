@@ -33,9 +33,9 @@ export default async function Page() {
           className="aspect-3/2 object-cover h-[240px] w-full"
         />
 
-        <span className="flex space-x-8 relative -top-20 w-full">
+        <span className="flex space-x-6 relative -top-20 w-full">
           <Image
-            className="object-cover h-[140px] w-[140px]"
+            className="object-cover h-[140px] w-[140px] ml-4 rounded-full"
             width={340}
             height={340}
             alt="avatar"
@@ -44,8 +44,6 @@ export default async function Page() {
           <UserState session={session} />
         </span>
       </div>
-
-      
     </main>
   );
 }

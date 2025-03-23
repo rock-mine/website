@@ -19,14 +19,12 @@ export const { auth, handlers, signOut } = NextAuth({
   callbacks: {
     async session({ session }) {
       if (session.user.name) {
-        const userFind = await user.findUser({
-          id: session.user.email,
-        });
+        const userFind = await user.findUser("id", session.user.email);
         console.log(userFind);
         if (!userFind) {
           user.addUser({
             id: session.user.email,
-            name: session.user.name,
+            name: session.user.name.toLowerCase(),
             display_name: session.user.name,
             image: session.user.image,
             email: session.user.email,

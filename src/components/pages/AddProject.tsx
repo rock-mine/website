@@ -22,7 +22,7 @@ import {
   Quote,
   PlusIcon,
   TriangleAlert,
-  YoutubeIcon, // Ícone para o botão de iframe do YouTube
+  YoutubeIcon,
 } from "lucide-react";
 import Button from "src/components/Button";
 import { useEffect, useRef, useState } from "react";
@@ -48,7 +48,9 @@ export default function AddProject({ session }: { session: Session | null }) {
   const [viewSucessSend, setSendSucess] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [downloads, setDownloads] = useState<{ name: string; link: string }[]>([]);
+  const [downloads, setDownloads] = useState<{ name: string; link: string }[]>(
+    []
+  );
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { openFilePicker, filesContent } = useFilePicker({
@@ -65,7 +67,7 @@ export default function AddProject({ session }: { session: Session | null }) {
   });
 
   // Função para validar URLs do YouTube
-  const isValidYouTubeUrl = (url: string): boolean => {
+  /*const isValidYouTubeUrl = (url: string): boolean => {
     const youtubeDomains = [
       "www.youtube.com",
       "youtube.com",
@@ -75,10 +77,10 @@ export default function AddProject({ session }: { session: Session | null }) {
     try {
       const parsedUrl = new URL(url);
       return youtubeDomains.includes(parsedUrl.hostname);
-    } catch (e) {
+    } catch (_) {
       return false; // URL inválida
     }
-  };
+  };*/
 
   const convertToYouTubeEmbedUrl = (url: string): string | null => {
     try {
@@ -92,22 +94,22 @@ export default function AddProject({ session }: { session: Session | null }) {
       }
       return null; // URL inválida
     } catch (e) {
-      return null; // URL inválida
+      return e ? null : "";
     }
   };
-  
-const addYouTubeIframe = () => {
-  const url = prompt("Digite a URL do vídeo do YouTube:");
-  if (url) {
-    const embedUrl = convertToYouTubeEmbedUrl(url); // Converte para embed
-    if (embedUrl) {
-      const iframeMarkdown = `<iframe src="${embedUrl}" title="YouTube video player" sandbox="allow-scripts allow-same-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" class="w-full h-64 border-none rounded-md my-4"></iframe>`;
-      applyFormatting(iframeMarkdown, "");
-    } else {
-      alert("Por favor, insira uma URL válida do YouTube.");
+
+  const addYouTubeIframe = () => {
+    const url = prompt("Digite a URL do vídeo do YouTube:");
+    if (url) {
+      const embedUrl = convertToYouTubeEmbedUrl(url); // Converte para embed
+      if (embedUrl) {
+        const iframeMarkdown = `<iframe src="${embedUrl}" title="YouTube video player" sandbox="allow-scripts allow-same-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" class="w-full h-64 border-none rounded-md my-4"></iframe>`;
+        applyFormatting(iframeMarkdown, "");
+      } else {
+        alert("Por favor, insira uma URL válida do YouTube.");
+      }
     }
-  }
-};
+  };
 
   // Função para aplicar formatação
   const applyFormatting = (prefix: string, suffix: string = prefix) => {
@@ -207,15 +209,13 @@ const addYouTubeIframe = () => {
               href="/tutorial"
               className="text-blueborder hover:text-bluetext bg-gray-500/5 transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md"
             >
-             <div className="flex items-center gap-2">
-  <span>Need Help? Click here to see tutorial</span>
-  <TriangleAlert />
-</div>
+              <div className="flex items-center gap-2">
+                <span>Need Help? Click here to see tutorial</span>
+                <TriangleAlert />
+              </div>
             </Link>
-            </div>
+          </div>
           <div className="w-full max-w-2xl space-y-4">
-            
-       
             <h1 className="text-xl font-bold">Title</h1>
             <Input
               onChange={(e) => {
@@ -446,7 +446,11 @@ const addYouTubeIframe = () => {
                 <button
                   key={tag}
                   onClick={() => handleTagChange(tag)}
-                  className={`px-3 py-1 border-blueborder border-4 ${selectedTags.includes(tag) ? "bg-blueselected text-bluetext" : "bg-bluebg text-bluetext hover:bg-bluehover"}`}
+                  className={`px-3 py-1 border-blueborder border-4 ${
+                    selectedTags.includes(tag)
+                      ? "bg-blueselected text-bluetext"
+                      : "bg-bluebg text-bluetext hover:bg-bluehover"
+                  }`}
                 >
                   {tag}
                 </button>
@@ -491,7 +495,6 @@ const addYouTubeIframe = () => {
               onClick={handleAddDownload}
               className="flex items-center justify-center space-x-2 bg-black/30 border-2 border-bluetext hover:bg-bluehover/40 rounded-md text-white px-1 py-1"
             >
-            
               <span>Add Download Link</span>
               <PlusIcon size={16} />
             </button>

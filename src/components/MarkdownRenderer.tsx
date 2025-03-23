@@ -10,7 +10,6 @@ interface MarkdownRendererProps {
   content: string;
 }
 
-
 const isValidYouTubeUrl = (url: string): boolean => {
   const youtubeDomains = [
     "www.youtube.com",
@@ -23,25 +22,45 @@ const isValidYouTubeUrl = (url: string): boolean => {
     const parsedUrl = new URL(url);
     return youtubeDomains.includes(parsedUrl.hostname);
   } catch (e) {
-    return false; 
+    return e ? false : true;
   }
 };
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
   const sanitizeSchema = {
     tagNames: [
-      "h1", "h2", "h3", "h4", "h5", "h6",
-      "p", "a", "ul", "ol", "li",
-      "code", "pre", "blockquote", "img",
-      "table", "th", "td", "tr", "br",
-      "strong", "em", "hr", "div", "span",
-      "iframe", 
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "h5",
+      "h6",
+      "p",
+      "a",
+      "ul",
+      "ol",
+      "li",
+      "code",
+      "pre",
+      "blockquote",
+      "img",
+      "table",
+      "th",
+      "td",
+      "tr",
+      "br",
+      "strong",
+      "em",
+      "hr",
+      "div",
+      "span",
+      "iframe",
     ],
     attributes: {
       "*": ["className", "style"],
       a: ["href", "target", "rel"],
       img: ["src", "alt", "title"],
-      iframe: ["src", "title", "width", "height", "allow", "sandbox"], 
+      iframe: ["src", "title", "width", "height", "allow", "sandbox"],
     },
   };
 

@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import moment from "moment";
 import { auth } from "@/utils/auth";
 import AddLikeButton from "@/components/pages/AddLikeButton";
+import Link from "next/link";
 
 export async function generateMetadata({
   params,
@@ -31,7 +32,7 @@ export default async function Page({
   const session = await auth();
   const actualAddon = (await params).addon;
   const addon = await db.getById(actualAddon);
-  const author = await user.findUser({ id: addon.author as string });
+  const author = await user.findUser("id", addon.author);
   console.log("author:");
   console.log(author);
 
@@ -59,7 +60,7 @@ export default async function Page({
               alt={addon?.name}
             />
           </div>
-          <div className="w-95 h-20 bg-black/20 p-3  border-3 border-t-0 border-blueborder">
+          <div className="w-95 min-h-20 bg-black/20 p-3  border-3 border-t-0 border-blueborder">
             <div className="flex items-center">
               <p className=" text-gray-300 p-1 text-sm">
                 {addon.short_description}
@@ -75,7 +76,7 @@ export default async function Page({
             <div className="flex items-center gap-2 p-2">
               <AlarmClock />
               <span className="text-white text-sm">
-                {moment(Number(addon.data_post)).format("L")}
+                {moment(Number(addon.data_post)).format("DD/MM/YYYY")}
               </span>
               <Image
                 width={100}
@@ -85,14 +86,19 @@ export default async function Page({
                 alt="Icon"
               />
               <span className="text-white text-sm">{addon.likes}</span>
-              <Image
-                width={100}
-                height={100}
-                src={author.image as string}
-                className="w-8 h-8 object-contain rounded-full"
-                alt="Icon"
-              />
-              <span className="text-white text-sm">{author?.name}</span>
+              <Link
+                className="text-white text-sm flex gap-1 items-center"
+                href={`/user/${author.name?.toLowerCase()}`}
+              >
+                <Image
+                  width={100}
+                  height={100}
+                  src={author.image as string}
+                  className="w-8 h-8 object-contain rounded-full"
+                  alt="Icon"
+                />
+                {author?.display_name}
+              </Link>
             </div>
 
             {addon?.tags && (

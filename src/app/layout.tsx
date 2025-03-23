@@ -13,7 +13,7 @@ export default async function Layout({
     <html>
       <body>
         <Menu session={session} />
-        <main>{children}</main>
+        <main className="">{children}</main>
       </body>
     </html>
   );

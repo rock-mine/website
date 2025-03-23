@@ -14,9 +14,9 @@ export default function Main(supabase: SupabaseClient) {
       console.log(data);
       return data;
     },
-    async findUser(opts: { id: string }): Promise<User> {
-      const { data } = await supabase.from("users").select();
-      return data?.find((v) => v.id === opts.id);
+    async findUser(name:string,value: string): Promise<User> {
+      const { data } = await supabase.from("users").select().eq(name,value);
+      return data ? data[0] :{}
     },
     async updateUser(id: string, newValue: User) {
       const { error } = await supabase
