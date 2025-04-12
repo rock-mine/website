@@ -18,7 +18,7 @@ export default function HomePage({ addons }: { addons: Addon[] }) {
     <div className="min-h-screen bg-gradient-to-b from-[#16131B] to-[#1E2A2F] text-white">
       <main className="flex flex-col items-center justify-center sm:pt-5 pt-14"></main>
 
-      <main className="w-[100vw] bg-bluebg bg-fixed overflow-x-hidden text-white flex justify-center">
+      <main className="w-full bg-bluebg bg-fixed overflow-x-hidden text-white flex justify-center">
         <Head>
           <title>Rock Mine</title>
           <link rel="icon" href="/logo.jpg" type="image/x-icon" />

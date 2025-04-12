@@ -1,10 +1,5 @@
 "use client";
 
-/*
-  @param Precisa melhora esse codigo, arruma quando pode 
-  @param By MineCode
-*/
-
 import type { Session } from "next-auth";
 import Button from "../Button";
 import Image from "next/image";
@@ -12,48 +7,59 @@ import { addon, user } from "@/utils/db";
 import type { Addon } from "@/types";
 import { useState } from "react";
 
-export default function AddLikeButton({
-  session,
-  actualAddon,
-}: {
+interface AddLikeButtonProps {
   actualAddon: Addon;
   session: Session | null;
-}) {
+}
+
+export default function AddLikeButton({
+  actualAddon,
+  session,
+}: AddLikeButtonProps) {
+  // Inicializa o estado "vote" verificando se o usuário já curtiu o addon
   const [vote, setVote] = useState(
-    session?.user.likes_posts?.includes(actualAddon.id)
+    session?.user.likes_posts?.includes(actualAddon.id) || false
   );
   const [like, setLike] = useState(actualAddon.likes);
+
+  // Função para tratar a lógica de curtir/descurtir
+  const handleVote = () => {
+    if (!session?.user?.likes_posts || !session.user.id) return;
+
+    if (!vote) {
+      // Adiciona o like caso ainda não tenha sido curtido
+      setVote(true);
+      setLike((prev) => prev + 1);
+      addon.setAddonState({ likes: like + 1 }, actualAddon.id);
+
+      // Atualiza os likes do usuário adicionando o ID do addon
+      user.updateUser(session.user.id, {
+        likes_posts: [
+          ...(Array.isArray(session.user.likes_posts)
+            ? session.user.likes_posts
+            : []),
+          actualAddon.id,
+        ],
+      });
+    } else {
+      // Remove o like caso o usuário já tenha curtido
+      setVote(false);
+      setLike((prev) => prev - 1);
+      addon.setAddonState({ likes: like - 1 }, actualAddon.id);
+
+      // Remove o ID do addon do array de likes utilizando comparação estrita
+      user.updateUser(session.user.id, {
+        likes_posts: session.user.likes_posts.filter(
+          (postId) => postId !== actualAddon.id
+        ),
+      });
+    }
+  };
 
   return (
     <Button
       isActive={vote}
-      onClick={() => {
-        if (!session?.user?.likes_posts) return;
-        if (!vote && !session?.user.likes_posts?.includes(actualAddon.id)) {
-          setVote(true);
-          addon.setAddonState({ likes: like + 1 }, actualAddon.id);
-          setLike(like + 1);
-
-          user.updateUser(session?.user.id as string, {
-            likes_posts: [
-              ...(Array.isArray(session?.user?.likes_posts)
-                ? session?.user?.likes_posts
-                : []),
-              actualAddon.id,
-            ],
-          });
-        } else {
-          setVote(false);
-
-          addon.setAddonState({ likes: like - 1 }, actualAddon.id);
-          setLike(like - 1);
-          user.updateUser(session?.user.id as string, {
-            likes_posts: session.user.likes_posts.filter(
-              (v) => !v.includes(actualAddon.id)
-            ),
-          });
-        }
-      }}
+      onClick={handleVote}
       className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm"
     >
       <Image

@@ -22,7 +22,7 @@ export default function AboutPage() {
         </h1>
 
         <div className="flex flex-col md:grid md:grid-cols-[400px_400px] items-center justify-center gap-8 p-4">
-          <div className="flex flex-col items-center bg-black/40 p-6 rounded-lg shadow-lg hover:shadow-hovershadow transition-shadow">
+          <div className="relative flex flex-col items-center bg-black/40 p-6 h-[360px] w-[400px] rounded-lg shadow-lg hover:shadow-hovershadow transition-shadow">
             <Image
               width={100}
               height={100}
@@ -36,14 +36,15 @@ export default function AboutPage() {
               e responsivas. 
             </p>
             <Link
+              target="_blank"
               href="https://github.com/blayy"
-              className="mt-4 px-4 py-2 bg-black/40 hover:shadow-hovershadow shadow-xl hover:text-bluetext transition-all"
+              className="absolute bottom-2 px-4 py-2 bg-black/40 hover:shadow-hovershadow shadow-xl hover:text-bluetext transition-all"
             >
               View Profile
             </Link>
           </div>
 
-          <div className="flex flex-col items-center bg-black/40 p-6 rounded-lg shadow-lg hover:shadow-hovershadow transition-shadow">
+          <div className="relative flex flex-col items-center h-[360px] w-[400px] bg-black/40 p-6 rounded-lg shadow-lg hover:shadow-hovershadow transition-shadow">
             <Image
               width={100}
               height={100}
@@ -58,7 +59,8 @@ export default function AboutPage() {
             </p>
             <Link
               href="https://github.com/minecodebr"
-              className="mt-4 px-4 py-2 bg-black/40 hover:shadow-hovershadow shadow-xl hover:text-bluetext transition-all"
+              target="_blank"
+              className="absolute bottom-2 px-4 py-2 bg-black/40 hover:shadow-hovershadow shadow-xl hover:text-bluetext transition-all"
             >
               View Profile
             </Link>

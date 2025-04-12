@@ -14,11 +14,11 @@ export async function generateMetadata({
   return {
     title: userData.display_name,
     icons: userData.image,
-    "og:title": "Embed Title",
-    "og:description": "Embed Title",
+    "og:title": userData.name,
+    "og:description": userData.bio,
     "og:url": "https://embed.com/this-is-the-site-url",
-    "og:image": "https://embed.com/embedimage.png",
-    "theme-color": "#43B581",
+    "og:image": userData.image,
+    "theme-color": "#eb83f4",
   } as Metadata;
 }
 
@@ -32,14 +32,6 @@ export default async function Page({
 
   return (
     <main className=" w-full relative mt-14">
-      <meta content="Embed Title" property="og:title" />
-      <meta content="Site Description" property="og:description" />
-      <meta
-        content="https://embed.com/this-is-the-site-url"
-        property="og:url"
-      />
-      <meta content="https://embed.com/embedimage.png" property="og:image" />
-      <meta content="#43B581" data-react-helmet="true" name="theme-color" />
       <div className="bg-[#0b090e] relative w-full">
         <Image
           height={3000}

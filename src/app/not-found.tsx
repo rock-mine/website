@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Custom404() {
   return (
-    <main className="flex flex-col items-center justify-center">
+    <main className="flex flex-col items-center justify-center mt-20">
       <Image
         width={100}
         height={100}

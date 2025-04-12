@@ -3,7 +3,7 @@ import Discord from "next-auth/providers/discord";
 import Google from "next-auth/providers/google";
 import { user } from "./db";
 
-export const { auth, handlers, signOut } = NextAuth({
+export const { auth, handlers, signOut,signIn } = NextAuth({
   providers: [
     Google({
       authorization: {
