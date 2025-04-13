@@ -5,13 +5,11 @@ export default function Main(supabase: SupabaseClient) {
   return {
     async addUser(opts: User) {
       // delete opts?.avatar;
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("users")
         .insert({ role: "", ...opts })
         .select();
 
-      console.log("add user error: " + JSON.stringify(error));
-      console.log(data);
       return data;
     },
     async findUser(name: string, value: string): Promise<User> {
@@ -19,12 +17,7 @@ export default function Main(supabase: SupabaseClient) {
       return data ? data[0] : {};
     },
     async updateUser(id: string, newValue: User) {
-      const { error } = await supabase
-        .from("users")
-        .update(newValue)
-        .eq("id", id);
-
-      console.log(error);
+      await supabase.from("users").update(newValue).eq("id", id);
     },
   };
 }

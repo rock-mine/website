@@ -189,10 +189,6 @@ export default function AddProject() {
     );
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return (
     <div className="mt-20">
       <Head>

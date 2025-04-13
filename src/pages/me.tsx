@@ -1,17 +1,31 @@
 import Head from "next/head";
 import Image from "next/image";
 import Button from "@/components/Button";
-import { Bell, Bookmark, Heart, UploadCloud } from "lucide-react";
+import { Bell, Bookmark, Heart, Pencil, UploadCloud } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useState } from "react";
-import { user } from "@/utils/db";
-import Link from "next/link";
+import { image, user } from "@/utils/db";
+import { useFilePicker } from "use-file-picker";
+import type { User } from "types";
 export default function Page() {
   const { data: session } = useSession();
-  const [displayName, setDisplayName] = useState<string>(
-    session?.user?.display_name as string
-  );
-  const [bio, setBio] = useState<string>(session?.user?.bio as string);
+  const [data, setData] = useState<User>({});
+
+  const { openFilePicker: openFilePickerAvatar, filesContent: fileAvatar } =
+    useFilePicker({
+      readAs: "DataURL",
+      accept: "image/*",
+      multiple: false,
+      validators: [],
+    });
+
+  const { openFilePicker: openFilePickerBanner, filesContent: fileBanner } =
+    useFilePicker({
+      readAs: "DataURL",
+      accept: "image/*",
+      multiple: false,
+      validators: [],
+    });
 
   if (!session?.user)
     return (
@@ -80,25 +94,52 @@ export default function Page() {
           width={3000}
           priority
           alt="banner"
-          src="/banner.png"
+          src={
+            fileBanner[0]?.content
+              ? fileBanner[0]?.content
+              : `/api/image/${session?.user?.name}-banner`
+          }
           className="aspect-3/2 object-cover h-[240px] w-full"
         />
+        <span
+          onClick={() => openFilePickerBanner()}
+          className="absolute hover:bg-[#0b090e]/70 duration-150 rounded-full p-4 right-4 top-5"
+        >
+          <Pencil size={32} />
+        </span>
 
         <span className="flex space-x-6 relative -top-20 w-full">
-          <Image
-            className="object-cover h-[140px] w-[140px] ml-4 rounded-full"
-            width={340}
-            height={340}
-            alt="avatar"
-            src={session?.user?.image as string}
-          />
+          <div
+            onClick={() => openFilePickerAvatar()}
+            className="relative h-36 w-36 p-2 bg-[#0b090e] rounded-full ml-4 group"
+          >
+            <Image
+              width={144}
+              height={144}
+              alt="avatar"
+              className="object-cover rounded-full"
+              src={
+                fileAvatar[0]?.content
+                  ? fileAvatar[0]?.content
+                  : `/api/image/${session?.user?.name}-avatar`
+              }
+            />
+            <div className="absolute inset-0 bg-[#0b090e]/30 flex items-center justify-center text-white rounded-full opacity-0 group-hover:opacity-100 transition">
+              <Pencil size={42} />
+            </div>
+          </div>
           <div className="relative w-full h-full">
             <div className="w-full">
               <div className="grid justify-items-start w-full">
                 <input
                   className="text-[40px] outline-none relative w-[500px] sm:w-[450px]"
                   defaultValue={session?.user?.display_name}
-                  onChange={(e) => setDisplayName(e.target.value)}
+                  onChange={(e) =>
+                    setData((baseData) => ({
+                      ...baseData,
+                      display_name: e.target.value,
+                    }))
+                  }
                 />
                 <h1 className="text-[17px] text-zinc-500">
                   @{session?.user?.name?.toLowerCase()}
@@ -111,10 +152,7 @@ export default function Page() {
                     <div
                       key={i}
                       data-tooltip={`${role[0].toUpperCase() + role.slice(1)}`}
-                      className={`relative whitespace-nowrap w-fit h-fit after:content-[attr(data-tooltip)] after:absolute after:left-2/4 after:translate-x-[-50%]
-                          after:bottom-[100%]
-                          after:text-[13px]
-                                            after:rounded-lg after:text-white after:invisible hover:after:visible`}
+                      className={`relative whitespace-nowrap w-fit h-fit after:content-[attr(data-tooltip)] after:absolute after:left-2/4 after:translate-x-[-50%] after:bottom-[100%] after:text-[13px] after:rounded-lg after:text-white after:invisible hover:after:visible`}
                     >
                       <Image
                         width={20}
@@ -131,7 +169,12 @@ export default function Page() {
               <textarea
                 className="resize-none outline-none w-full h-full p-4"
                 defaultValue={session?.user?.bio}
-                onChange={(e) => setBio(e.target.value)}
+                onChange={(e) =>
+                  setData((baseData) => ({
+                    ...baseData,
+                    bio: e.target.value,
+                  }))
+                }
               />
             </div>
             <div className="relative flex mt-30 -left-[20%] md:mt-5 space-x-8 w-full md:left-0 md:w-[800px]">
@@ -145,21 +188,22 @@ export default function Page() {
               <button
                 className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-2 border-blueborder"
                 onClick={() => {
-                  user.updateUser(session?.user?.id as string, {
-                    bio,
-                    display_name: displayName,
-                  });
+                  if (fileAvatar[0]?.content)
+                    image.updateImg(
+                      `${session?.user.name}-avatar`,
+                      fileAvatar[0].content.split("base64,")[1]
+                    );
+                  if (fileBanner[0]?.content) {
+                    image.updateImg(
+                      `${session?.user.name}-banner`,
+                      fileBanner[0].content.split("base64,")[1]
+                    );
+                  }
+                  user.updateUser(session?.user?.id as string, data);
                 }}
               >
                 Save changes
               </button>
-              <Link
-                href="/addproject"
-                className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-2 border-blueborder"
-              >
-                Create Project +
-              </Link>
-              <div className="flex-shrink-0"></div>
             </div>
           </div>
         </span>

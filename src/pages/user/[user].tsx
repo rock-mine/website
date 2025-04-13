@@ -3,11 +3,13 @@ import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import type { User } from "types";
+import Custom404 from "../404";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // Isso roda a cada request
   if (context.params?.user) {
     const user = await db.findUser("name", context.params?.user as string);
+    if (!user) return { props: {} };
 
     return {
       props: {
@@ -19,12 +21,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: {} };
 };
 export default function Page({ user }: { user: User }) {
+  if (!user) return <Custom404 />;
   return (
     <main className=" w-full relative mt-14">
       <Head>
         <title>{user.display_name}</title>
         <meta name="theme-color" content="#eb83f4" />
-        <link rel="icon" href={user.image} />
+        <link rel="icon" href={`/api/image/${user?.name}-avatar`} />
 
         {/* Open Graph */}
         <meta property="og:title" content={user.display_name} />
@@ -33,7 +36,7 @@ export default function Page({ user }: { user: User }) {
           property="og:url"
           content={`https://rock-mine.vercel.app/user/${user}`}
         />
-        <meta property="og:image" content={user.image} />
+        <meta property="og:image" content={`/api/image/${user?.name}-avatar`} />
       </Head>
       <div className="bg-[#0b090e] relative w-full">
         <Image
@@ -41,7 +44,7 @@ export default function Page({ user }: { user: User }) {
           width={3000}
           priority
           alt="banner"
-          src="/banner.png"
+          src={`/api/image/${user?.name}-banner`}
           className="aspect-3/2 object-cover h-[240px] w-full"
         />
 
@@ -51,7 +54,7 @@ export default function Page({ user }: { user: User }) {
             width={340}
             height={340}
             alt="avatar"
-            src={user?.image as string}
+            src={`/api/image/${user?.name}-avatar`}
           />
           <div className="relative w-full h-full">
             <div className="w-full">

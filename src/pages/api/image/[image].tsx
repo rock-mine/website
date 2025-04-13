@@ -4,15 +4,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log(req.query);
   const { image } = req.query;
 
-  console.log(image);
   if (typeof image !== "string") {
     return res.status(400).json({ error: "Arquivo inválido" });
   }
-  const imageUrl = `https://gpvzyqfhcdfuaksujvwo.supabase.co/storage/v1/object/public/logos//${image}.png`;
-  console.log(imageUrl);
+  const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/images//${image}`;
 
   const response = await fetch(imageUrl);
 

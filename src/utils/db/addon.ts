@@ -25,30 +25,21 @@ export default function Main(supabase: SupabaseClient) {
       const baseAddon: Addon = addon;
       const idIcon = generateUUID();
 
-      try {
-        await supabase.storage
-          .from("logos")
-          .upload(`${idIcon}.png`, decode(baseAddon.logo.split("base64,")[1]), {
-            contentType: "image/png",
-          });
-      } catch (error) {
-        console.log(error);
-      }
+      await supabase.storage
+        .from("images")
+        .upload(`${idIcon}`, decode(baseAddon.logo.split("base64,")[1]), {
+          contentType: "image/png",
+        });
 
       const { data, error } = await supabase
         .from("addons")
         .insert({
           ...baseAddon,
           data_post: Date.now(),
-          logo: `https://gpvzyqfhcdfuaksujvwo.supabase.co/storage/v1/object/public/logos/${idIcon}.png`,
+          logo: `api/images/${idIcon}`,
           author,
         })
         .select();
-
-      console.log(data);
-
-      console.log(error);
-
       return data;
     },
     async setAddonState(data: object, id: string) {

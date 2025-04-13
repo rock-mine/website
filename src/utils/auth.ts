@@ -13,13 +13,14 @@ export const authOptions: AuthOptions = {
     async session({ session }) {
       if (session.user.email && session.user.name) {
         const userFind = await user.findUser("id", session.user.email);
-        console.log(userFind);
         if (!userFind) {
           fetch(session.user.image!).then(async (res) => {
             supabase.storage
-              .from("logos")
+              .from("images")
               .upload(
-                `${session.user!.name!.toLowerCase().replaceAll(" ", "")}`,
+                `${session
+                  .user!.name!.toLowerCase()
+                  .replaceAll(" ", "")}-avatar`,
                 await res.arrayBuffer(),
                 {
                   contentType: "image/png",
@@ -27,18 +28,31 @@ export const authOptions: AuthOptions = {
               );
           });
 
+          fetch(`http://localhost:3000/api/image/base-banner`).then(
+            async (res) => {
+              supabase.storage
+                .from("images")
+                .upload(
+                  `${session
+                    .user!.name!.toLowerCase()
+                    .replaceAll(" ", "")}-banner`,
+                  await res.arrayBuffer(),
+                  {
+                    contentType: "image/png",
+                  }
+                );
+            }
+          );
+
           user.addUser({
             id: session.user.email,
             name: session.user.name.toLowerCase(),
             display_name: session.user.name,
-            image: `/api/image/${session
-              .user!.name!.toLowerCase()
-              .replaceAll(" ", "")}.png`,
             email: session.user.email,
           });
           session.user.id = session.user.email;
           session.user.display_name = session.user.name;
-          session.user.image = session.user.image;
+          delete session.user.image;
           session.user.role = "";
         } else {
           Object(session).user = userFind;
