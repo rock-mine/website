@@ -5,9 +5,9 @@ import DynamicHome from "src/components/DynamicHome";
 import ControlsHome from "src/components/ControlsHome";
 import Head from "next/head";
 import type { Addon } from "types";
-import Image from "next/image";
 import type { GetStaticProps } from "next";
 import { addon } from "@/utils/db";
+import { Search } from "lucide-react";
 
 export const getStaticProps: GetStaticProps = async () => {
   const addons = await addon.getAll();
@@ -46,13 +46,7 @@ export default function Main({ addons }: { addons: Addon[] }) {
                   showSearch ? "bg-blueselected" : "bg-bluebg bg-black/20"
                 } text-bluetext hover:bg-bluehover`}
               >
-                <Image
-                  width={100}
-                  height={100}
-                  src="/icons/search.svg"
-                  className="w-5 h-5 invert"
-                  alt="Share"
-                />
+                <Search />
                 <p className="ml-2">
                   {" "}
                   {showSearch ? " Hide Filters" : " Show Search Filters"}

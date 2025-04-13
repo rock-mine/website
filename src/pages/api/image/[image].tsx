@@ -4,13 +4,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { file } = req.query;
+  console.log(req.query);
+  const { image } = req.query;
 
-  if (typeof file !== "string") {
+  console.log(image);
+  if (typeof image !== "string") {
     return res.status(400).json({ error: "Arquivo inválido" });
   }
-
-  const imageUrl = `https://gpvzyqfhcdfuaksujvwo.supabase.co/storage/v1/object/public/logos/${file}`;
+  const imageUrl = `https://gpvzyqfhcdfuaksujvwo.supabase.co/storage/v1/object/public/logos//${image}.png`;
+  console.log(imageUrl);
 
   const response = await fetch(imageUrl);
 

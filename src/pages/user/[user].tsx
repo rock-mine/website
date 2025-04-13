@@ -35,14 +35,6 @@ export default function Page({ user }: { user: User }) {
         />
         <meta property="og:image" content={user.image} />
       </Head>
-      <meta property="og:title" content={user.name} />
-      <meta property="og:description" content={user.bio} />
-      <meta
-        property="og:url"
-        content={`https://rock-mine.vercel.app/user/${user.id}`}
-      />
-      <meta property="og:image" content={user.image} />
-      <meta name="theme-color" content="#eb83f4" />
       <div className="bg-[#0b090e] relative w-full">
         <Image
           height={3000}

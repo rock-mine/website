@@ -1,7 +1,7 @@
 import { useSearchParams } from "next/navigation";
 import type { Dispatch, SetStateAction } from "react";
 import Button from "./Button";
-import Image from "next/image";
+import { Blocks, Map, PaintBucket } from "lucide-react";
 export default function HeadBar({
   setPage,
 }: {
@@ -23,13 +23,7 @@ export default function HeadBar({
           onClick={() => setPage(0)}
           isActive={actualPage === "textures"}
         >
-          <Image
-            width={100}
-            height={100}
-            src="/icons/textures.svg"
-            className="w-5 h-5 invert"
-            alt="Share"
-          />
+          <PaintBucket />
           <h1> TEXTURES</h1>
         </Button>
         <Button
@@ -39,13 +33,7 @@ export default function HeadBar({
           onClick={() => setPage(0)}
           isActive={!actualPage || actualPage === "mods"}
         >
-          <Image
-            width={100}
-            height={100}
-            src="/icons/mods.svg"
-            className="w-5 h-5 invert"
-            alt="Share"
-          />
+          <Blocks />
           <h1>MODS</h1>
         </Button>
         <Button
@@ -55,13 +43,7 @@ export default function HeadBar({
           onClick={() => setPage(0)}
           isActive={actualPage === "maps"}
         >
-          <Image
-            width={100}
-            height={100}
-            src="/icons/user.svg"
-            className="w-5 h-5 invert"
-            alt="Share"
-          />
+          <Map />
           <h1>MAPS</h1>
         </Button>
       </div>

@@ -1,5 +1,5 @@
 import NextAuth, { type AuthOptions } from "next-auth";
-import { user } from "./db";
+import { supabase, user } from "./db";
 import Discord from "next-auth/providers/discord";
 
 export const authOptions: AuthOptions = {
@@ -15,11 +15,25 @@ export const authOptions: AuthOptions = {
         const userFind = await user.findUser("id", session.user.email);
         console.log(userFind);
         if (!userFind) {
+          fetch(session.user.image!).then(async (res) => {
+            supabase.storage
+              .from("logos")
+              .upload(
+                `${session.user!.name!.toLowerCase().replaceAll(" ", "")}`,
+                await res.arrayBuffer(),
+                {
+                  contentType: "image/png",
+                }
+              );
+          });
+
           user.addUser({
             id: session.user.email,
             name: session.user.name.toLowerCase(),
             display_name: session.user.name,
-            image: session.user.image,
+            image: `/api/image/${session
+              .user!.name!.toLowerCase()
+              .replaceAll(" ", "")}.png`,
             email: session.user.email,
           });
           session.user.id = session.user.email;
