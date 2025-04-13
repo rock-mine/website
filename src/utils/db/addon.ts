@@ -1,6 +1,14 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Addon } from "@/types";
+import type { Addon } from "types";
 import { decode } from "base64-arraybuffer";
+
+export function generateUUID() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
 
 export default function Main(supabase: SupabaseClient) {
   return {
@@ -15,17 +23,14 @@ export default function Main(supabase: SupabaseClient) {
     },
     async addAddon(addon: Addon, author: string) {
       const baseAddon: Addon = addon;
+      const idIcon = generateUUID();
 
       try {
         await supabase.storage
           .from("logos")
-          .upload(
-            `${addon.id}.png`,
-            decode(baseAddon.logo.split("base64,")[1]),
-            {
-              contentType: "image/png",
-            }
-          );
+          .upload(`${idIcon}.png`, decode(baseAddon.logo.split("base64,")[1]), {
+            contentType: "image/png",
+          });
       } catch (error) {
         console.log(error);
       }
@@ -35,7 +40,7 @@ export default function Main(supabase: SupabaseClient) {
         .insert({
           ...baseAddon,
           data_post: Date.now(),
-          logo: `https://gpvzyqfhcdfuaksujvwo.supabase.co/storage/v1/object/public/logos//${addon.id}.png`,
+          logo: `https://gpvzyqfhcdfuaksujvwo.supabase.co/storage/v1/object/public/logos/${idIcon}.png`,
           author,
         })
         .select();

@@ -1,37 +1,48 @@
 import { user as db } from "@/utils/db";
-import type { Metadata } from "next";
+import type { GetServerSideProps } from "next";
+import Head from "next/head";
 import Image from "next/image";
+import type { User } from "types";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ user: string }>;
-}): Promise<Metadata> {
-  // read route params
-  const { user } = await params;
-  const userData = await db.findUser("name", user);
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // Isso roda a cada request
+  if (context.params?.user) {
+    const user = await db.findUser("name", context.params?.user as string);
 
-  return {
-    title: userData.display_name,
-    icons: userData.image,
-    "og:title": userData.name,
-    "og:description": userData.bio,
-    "og:url": "https://embed.com/this-is-the-site-url",
-    "og:image": userData.image,
-    "theme-color": "#eb83f4",
-  } as Metadata;
-}
+    return {
+      props: {
+        user,
+      },
+    };
+  }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ user: string }>;
-}) {
-  const userName = (await params).user;
-  const user = await db.findUser("name", userName);
-
+  return { props: {} };
+};
+export default function Page({ user }: { user: User }) {
   return (
     <main className=" w-full relative mt-14">
+      <Head>
+        <title>{user.display_name}</title>
+        <meta name="theme-color" content="#eb83f4" />
+        <link rel="icon" href={user.image} />
+
+        {/* Open Graph */}
+        <meta property="og:title" content={user.display_name} />
+        <meta property="og:description" content={user.bio} />
+        <meta
+          property="og:url"
+          content={`https://rock-mine.vercel.app/user/${user}`}
+        />
+        <meta property="og:image" content={user.image} />
+      </Head>
+      <meta property="og:title" content={user.name} />
+      <meta property="og:description" content={user.bio} />
+      <meta
+        property="og:url"
+        content={`https://rock-mine.vercel.app/user/${user.id}`}
+      />
+      <meta property="og:image" content={user.image} />
+      <meta name="theme-color" content="#eb83f4" />
       <div className="bg-[#0b090e] relative w-full">
         <Image
           height={3000}

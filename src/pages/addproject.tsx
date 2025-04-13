@@ -1,4 +1,4 @@
-"use client";
+import { useSession } from "next-auth/react";
 import Input from "src/components/Input";
 import { useFilePicker } from "use-file-picker";
 import Link from "next/link";
@@ -28,10 +28,10 @@ import Button from "src/components/Button";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { addon } from "src/utils/db";
-import type { Addon } from "@/types";
-import type { Session } from "next-auth";
+import type { Addon } from "types";
 import MarkdownRenderer from "src/components/MarkdownRenderer";
-import tags from "@/tags.json";
+import tags from "@/extras/tags.json";
+import Head from "next/head";
 
 type AddonBaseConfig = {
   name?: string;
@@ -42,7 +42,8 @@ type AddonBaseConfig = {
   downloads?: { name: string; link: string }[];
 };
 
-export default function AddProject({ session }: { session: Session | null }) {
+export default function AddProject() {
+  const { data: session } = useSession();
   const [data, setData] = useState<AddonBaseConfig | null>();
   const [viewErro, setViewErro] = useState(false);
   const [viewSucessSend, setSendSucess] = useState(false);
@@ -194,6 +195,10 @@ export default function AddProject({ session }: { session: Session | null }) {
 
   return (
     <div className="mt-20">
+      <Head>
+        <title>Upload project</title>
+        <link rel="icon" href="/logo.jpg" />
+      </Head>
       {viewSucessSend ? (
         <div className="h-full w-full fixed grid place-items-center text-center space-y-8">
           <span className="flex items-center space-x-1.5">

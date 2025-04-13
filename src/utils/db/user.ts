@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { User } from "@/types";
+import type { User } from "types";
 
 export default function Main(supabase: SupabaseClient) {
   return {
@@ -14,9 +14,9 @@ export default function Main(supabase: SupabaseClient) {
       console.log(data);
       return data;
     },
-    async findUser(name:string,value: string): Promise<User> {
-      const { data } = await supabase.from("users").select().eq(name,value);
-      return data ? data[0] :{}
+    async findUser(name: string, value: string): Promise<User> {
+      const { data } = await supabase.from("users").select().eq(name, value);
+      return data ? data[0] : {};
     },
     async updateUser(id: string, newValue: User) {
       const { error } = await supabase

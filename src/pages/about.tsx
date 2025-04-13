@@ -1,13 +1,7 @@
-import type { Metadata } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 // grid grid-cols-[800px_800px]
-
-export const metadata: Metadata = {
-  title: "About us",
-  icons: "/logo.jpg",
-};
 
 export default function AboutPage() {
   return (
@@ -33,7 +27,7 @@ export default function AboutPage() {
             <h2 className="text-2xl font-bold mt-4 text-bluetext">Blayy</h2>
             <p className="mt-2 text-gray-400 text-center">
               Desenvolvedor Front-end apaixonado por criar interfaces intuitivas
-              e responsivas. 
+              e responsivas.
             </p>
             <Link
               target="_blank"

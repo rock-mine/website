@@ -1,11 +1,17 @@
-import tags from "@/tags.json";
-export default function SearchBar({ query, setQuery, selectedTags, setSelectedTags }: {
+import tags from "@/extras/tags.json";
+export default function SearchBar({
+  query,
+  setQuery,
+  selectedTags,
+  setSelectedTags,
+}: {
   query: string;
   setQuery: (value: string) => void;
   selectedTags: string[];
-  setSelectedTags: (tags: string[] | ((prevTags: string[]) => string[])) => void;
+  setSelectedTags: (
+    tags: string[] | ((prevTags: string[]) => string[])
+  ) => void;
 }) {
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
@@ -17,8 +23,6 @@ export default function SearchBar({ query, setQuery, selectedTags, setSelectedTa
         : [...prevTags, tag]
     );
   };
-
-
 
   return (
     <div className="w-full flex flex-col items-center justify-center">
@@ -37,7 +41,11 @@ export default function SearchBar({ query, setQuery, selectedTags, setSelectedTa
           <button
             key={tag}
             onClick={() => handleTagClick(tag)}
-            className={`px-3 py-1 border-blueborder border-4 ${selectedTags.includes(tag) ? "bg-blueselected text-bluetext" : "bg-bluebg text-bluetext hover:bg-bluehover"}`}
+            className={`px-3 py-1 border-blueborder border-4 ${
+              selectedTags.includes(tag)
+                ? "bg-blueselected text-bluetext"
+                : "bg-bluebg text-bluetext hover:bg-bluehover"
+            }`}
           >
             {tag}
           </button>
@@ -45,4 +53,4 @@ export default function SearchBar({ query, setQuery, selectedTags, setSelectedTa
       </div>
     </div>
   );
-};
+}

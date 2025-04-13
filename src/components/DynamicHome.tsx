@@ -1,6 +1,6 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import type { Addon } from "@/types";
+import type { Addon } from "types";
 import Image from "next/image";
 
 export default function DynamicHome({

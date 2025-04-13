@@ -4,7 +4,7 @@ import type { Session } from "next-auth";
 import Button from "../Button";
 import Image from "next/image";
 import { addon, user } from "@/utils/db";
-import type { Addon } from "@/types";
+import type { Addon } from "types";
 import { useState } from "react";
 
 interface AddLikeButtonProps {

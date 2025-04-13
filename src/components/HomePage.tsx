@@ -5,7 +5,7 @@ import HeadBar from "src/components/HeadBar";
 import DynamicHome from "src/components/DynamicHome";
 import ControlsHome from "src/components/ControlsHome";
 import Head from "next/head";
-import type { Addon } from "src/types";
+import type { Addon } from "types";
 import Image from "next/image";
 
 export default function HomePage({ addons }: { addons: Addon[] }) {

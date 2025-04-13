@@ -5,7 +5,7 @@
 ## Tecnologias Utilizadas
 
 - ⚡ **NextJs** – Framework moderno para aplicações web rápidas e escaláveis.
-- 🔐 **Auth.js** – Autenticação segura e integrada.
+- 🔐 **NextAuth** – Autenticação segura e integrada.
 - 🎨 **TailwindCSS** – Estilização eficiente e responsiva.
 
 ## Recursos
@@ -20,7 +20,7 @@
 - [x] **Sistema de login**
 - [x] **Resposividade**
 - [x] **Settings page**
-- [ ] **Icons melhore**
+- [x] **Icons melhore**
 - [ ] **Abri para o publico** (Qualquer pode envia seu projeto ;D)
 - [ ] **Melhora desempenho**
 
@@ -57,9 +57,8 @@ Siga os passos abaixo para rodar o projeto localmente:
 4. Configure as variáveis de ambiente criando um arquivo `.env.local` com as credenciais necessárias seguindo o exemplo:
 
 ```env
-# https://console.cloud.google.com/auth/clients
-AUTH_GOOGLE_ID=
-AUTH_GOOGLE_SECRET=
+# Added by `npx auth`. Read more: https://cli.authjs.dev
+AUTH_SECRET=
 
 # https://discord.com/developers/applications
 AUTH_DISCORD_ID=

@@ -1,24 +1,17 @@
-import NextAuth from "next-auth";
-import Discord from "next-auth/providers/discord";
-import Google from "next-auth/providers/google";
+import NextAuth, { type AuthOptions } from "next-auth";
 import { user } from "./db";
+import Discord from "next-auth/providers/discord";
 
-export const { auth, handlers, signOut,signIn } = NextAuth({
+export const authOptions: AuthOptions = {
   providers: [
-    Google({
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
+    Discord({
+      clientId: process.env.AUTH_DISCORD_ID!,
+      clientSecret: process.env.AUTH_DISCORD_SECRET!,
     }),
-    Discord,
   ],
   callbacks: {
     async session({ session }) {
-      if (session.user.name) {
+      if (session.user.email && session.user.name) {
         const userFind = await user.findUser("id", session.user.email);
         console.log(userFind);
         if (!userFind) {
@@ -41,5 +34,6 @@ export const { auth, handlers, signOut,signIn } = NextAuth({
       return session;
     },
   },
-  trustHost: true,
-});
+  secret: process.env.AUTH_SECRET,
+};
+export const NextAuthApi = NextAuth(authOptions);

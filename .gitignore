@@ -1,6 +1,6 @@
 node_modules/
 .next/
-bun.lock
+pnpm-lock.yaml
 package-lock.json
 .env.local
 .env
