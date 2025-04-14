@@ -23,15 +23,31 @@ import {
   PlusIcon,
   TriangleAlert,
   YoutubeIcon,
+  Loader,
 } from "lucide-react";
 import Button from "src/components/Button";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { addon } from "src/utils/db";
 import type { Addon } from "types";
 import MarkdownRenderer from "src/components/MarkdownRenderer";
 import tags from "@/extras/tags.json";
 import Head from "next/head";
+import { z } from "zod";
+
+const linkSchema = z.array(
+  z.object({
+    link: z.string().min(10),
+    name: z.string().url(),
+  })
+);
+
+const addonSchema = z.object({
+  name: z.string().min(4),
+  short_description: z.string().min(10),
+  description: z.string().min(40),
+  logo: z.string().min(4),
+});
 
 type AddonBaseConfig = {
   name?: string;
@@ -44,8 +60,9 @@ type AddonBaseConfig = {
 
 export default function AddProject() {
   const { data: session } = useSession();
-  const [data, setData] = useState<AddonBaseConfig | null>();
+  const [data, setData] = useState<AddonBaseConfig>({});
   const [viewErro, setViewErro] = useState(false);
+  const [startSucess, setStartSucess] = useState(false);
   const [viewSucessSend, setSendSucess] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -226,7 +243,7 @@ export default function AddProject() {
                 }));
               }}
               className={`w-full ${
-                viewErro && (data?.name === "" || !data?.name)
+                viewErro && !z.string().min(4).safeParse(data?.name).success
                   ? "border-4 border-red-400"
                   : ""
               }`}
@@ -244,7 +261,7 @@ export default function AddProject() {
               placeholder="Enter your description"
               className={`w-full ${
                 viewErro &&
-                (data?.short_description === "" || !data?.short_description)
+                !z.string().min(10).safeParse(data?.short_description).success
                   ? "border-4 border-red-400"
                   : ""
               }`}
@@ -308,7 +325,8 @@ export default function AddProject() {
               <div className="w-full">
                 <div
                   className={`flex h-10 border-4 border-blueborder ${
-                    viewErro && (data?.description === "" || !data?.description)
+                    viewErro &&
+                    !z.string().min(40).safeParse(data?.description).success
                       ? "border-red-400"
                       : ""
                   }`}
@@ -430,7 +448,8 @@ export default function AddProject() {
                     }));
                   }}
                   className={`w-full h-96 p-2 outline-none resize-none border-4 border-t-0 border-blueborder ${
-                    viewErro && (data?.description === "" || !data?.description)
+                    viewErro &&
+                    !z.string().min(40).safeParse(data?.description).success
                       ? "border-red-400"
                       : ""
                   }`}
@@ -466,6 +485,13 @@ export default function AddProject() {
               {downloads.map((download, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <Input
+                    className={
+                      viewErro &&
+                      z.string().min(10).safeParse(downloads[index].name)
+                        .success
+                        ? ""
+                        : "border-2 border-red-500"
+                    }
                     value={download.name}
                     onChange={(e) => {
                       const newDownloads = [...downloads];
@@ -475,6 +501,12 @@ export default function AddProject() {
                     placeholder="Download Name"
                   />
                   <Input
+                    className={
+                      viewErro &&
+                      z.string().url().safeParse(downloads[index].link).success
+                        ? ""
+                        : "border-2 border-red-500"
+                    }
                     value={download.link}
                     onChange={(e) => {
                       const newDownloads = [...downloads];
@@ -504,15 +536,16 @@ export default function AddProject() {
           {/* Botão de Envio */}
           <div className="w-full max-w-2xl">
             <Button
-              onClick={() => {
+              onClick={async () => {
+                if (startSucess) return;
                 setViewErro(true);
                 if (
-                  data?.name &&
-                  data?.description &&
-                  data?.short_description &&
-                  data?.logo
+                  addonSchema.safeParse(data).success &&
+                  linkSchema.safeParse(downloads).success
                 ) {
-                  addon.addAddon(
+                  if (!data.name) return;
+                  setStartSucess(true);
+                  await addon.addAddon(
                     {
                       ...data,
                       id: data.name.toLowerCase().replace(/ /g, ""),
@@ -526,8 +559,13 @@ export default function AddProject() {
                   setSendSucess(true);
                 }
               }}
-              className="w-full"
+              className={`${
+                startSucess
+                  ? "opacity-50 cursor-not-allowed shadow-none hover:text-white"
+                  : ""
+              } gap-5 w-full`}
             >
+              {startSucess && <Loader className="animate-spin" />}
               Submit Project
             </Button>
           </div>

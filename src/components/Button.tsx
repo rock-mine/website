@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import type { ComponentProps } from "react";
+import { twMerge } from "tailwind-merge";
 
 interface ButtonProps extends ComponentProps<"button"> {
   href?: string;
@@ -11,25 +12,28 @@ interface ButtonProps extends ComponentProps<"button"> {
   text?: string;
 }
 
-export default function Button({ 
-  className, 
+export default function Button({
+  className,
   variant = "default",
   isActive,
   isactive,
   href,
   text,
   children,
-  ...props 
+  ...props
 }: ButtonProps) {
   const active = isActive || isactive;
-  const commonClasses = `
+  const commonClasses = twMerge(
+    `
     ${active ? "bg-blueselected" : ""}
     hover:shadow-hovershadow shadow-blueshadow shadow-xl 
     hover:text-bluetext transition-colors duration-300 
     bg-black/20 border-4 border-blueborder bg-bluebg 
     text-center p-2 px-4 font-bold flex flex-grow 
-    justify-center items-center ${className || ""}
-  `.trim();
+    justify-center items-center
+  `,
+    className
+  );
 
   if (variant === "link" && href) {
     return (
@@ -40,11 +44,7 @@ export default function Button({
   }
 
   return (
-    <button
-      className={commonClasses}
-      type={props.type || "button"}
-      {...props}
-    >
+    <button className={commonClasses} type={props.type || "button"} {...props}>
       {children || text}
     </button>
   );

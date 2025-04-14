@@ -113,7 +113,7 @@ export default function Page({
 
                 <div className="flex items-center gap-1">
                   <Heart />
-                  <span>{addon.likes}</span>
+                  <span>{like}</span>
                 </div>
 
                 <Link

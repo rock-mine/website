@@ -31,12 +31,12 @@ export default function Main(supabase: SupabaseClient) {
           contentType: "image/png",
         });
 
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("addons")
         .insert({
           ...baseAddon,
           data_post: Date.now(),
-          logo: `api/images/${idIcon}`,
+          logo: `api/image/${idIcon}`,
           author,
         })
         .select();
