@@ -32,7 +32,7 @@ export default function Button({
     text-center p-2 px-4 font-bold flex flex-grow 
     justify-center items-center
   `,
-    className
+    className || ""
   );
 
   if (variant === "link" && href) {

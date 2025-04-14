@@ -36,7 +36,7 @@ export default function Main(supabase: SupabaseClient) {
         .insert({
           ...baseAddon,
           data_post: Date.now(),
-          logo: `api/image/${idIcon}`,
+          logo: `/api/image/${idIcon}`,
           author,
         })
         .select();
