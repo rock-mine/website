@@ -1,1 +1,45 @@
-["survival", "items", "utility", "mobs", "difficulty", "magic", "tools", "weapons", "blocks"]
+{
+    "textures": [
+        "Realistic",
+        "Cartoon",
+        "Fantasy",
+        "Medieval",
+        "RPG",
+        "PVP",
+        "Simplistic",
+        "Detailed",
+        "Faithful",
+        "HD",
+        "16x",
+        "32x",
+        "64x",
+        "128x",
+        "Deferred Lighting",
+        "Custom Sky"
+    ],
+    "maps": [
+        "Adventure",
+        "Survival",
+        "Puzzle",
+        "Parkour",
+        "Horror",
+        "Minigame",
+        "PVP",
+        "City",
+        "Medieval",
+        "Fantasy",
+        "Modern",
+        "Custom Terrain"
+    ],
+    "addons": [
+        "Survival",
+        "Items",
+        "Utility",
+        "Mobs",
+        "Difficulty",
+        "Magic",
+        "Tools",
+        "Weapons",
+        "Blocks"
+    ]
+}

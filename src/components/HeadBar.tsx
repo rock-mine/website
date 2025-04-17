@@ -8,8 +8,11 @@ export default function HeadBar({
   setPage: Dispatch<SetStateAction<number>>;
 }) {
   const searchParams = useSearchParams();
-
   const actualPage = searchParams.get("page");
+
+
+  console.log("Página atual:", actualPage);
+
   return (
     <div className="flex flex-col items-center justify-center">
       <h1 className="font-bold sm:text-[50px] tablet:text-[15px] text-[25px]">
@@ -17,7 +20,7 @@ export default function HeadBar({
       </h1>
       <div className="sm:flex gap-1 text-bluetext tablet:w-[95vw] sm:w-[600px] grid w-[300px]">
         <Button
-          className="bg-black/20 flex items-center justify-center gap-2 px-3 py-2  text-sm"
+          className="flex items-center justify-center gap-2 px-3 py-2 text-sm"
           variant="link"
           href="/?page=textures"
           onClick={() => setPage(0)}
@@ -27,7 +30,7 @@ export default function HeadBar({
           <h1> TEXTURES</h1>
         </Button>
         <Button
-          className="bg-black/20 flex items-center justify-center gap-2 px-3 py-2  text-sm"
+          className="flex items-center justify-center gap-2 px-3 py-2 text-sm"
           variant="link"
           href="/?page=mods"
           onClick={() => setPage(0)}
@@ -37,7 +40,7 @@ export default function HeadBar({
           <h1>MODS</h1>
         </Button>
         <Button
-          className="bg-black/20 flex items-center justify-center gap-2 px-3 py-2  text-sm"
+          className="flex items-center justify-center gap-2 px-3 py-2 text-sm"
           variant="link"
           href="/?page=maps"
           onClick={() => setPage(0)}

@@ -1,4 +1,5 @@
 import tags from "@/extras/tags.json";
+import { useSearchParams } from "next/navigation";
 export default function SearchBar({
   query,
   setQuery,
@@ -23,7 +24,9 @@ export default function SearchBar({
         : [...prevTags, tag]
     );
   };
+  const searchParams = useSearchParams();
 
+  const actualPage = searchParams.get("page");
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <div className="max-w-[500px] w-full flex p-3">
@@ -37,19 +40,52 @@ export default function SearchBar({
         </div>
       </div>
       <div className="flex flex-wrap gap-2 mt-2 items-center justify-center">
-        {tags.map((tag) => (
-          <button
-            key={tag}
-            onClick={() => handleTagClick(tag)}
-            className={`px-3 py-1 border-blueborder border-4 ${
-              selectedTags.includes(tag)
-                ? "bg-blueselected text-bluetext"
-                : "bg-bluebg text-bluetext hover:bg-bluehover"
-            }`}
-          >
-            {tag}
-          </button>
-        ))}
+        {actualPage == "textures"
+          ? tags.textures.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => handleTagClick(tag)}
+                className={`px-3 py-1 border-blueborder border-4 ${
+                  selectedTags.includes(tag)
+                    ? "bg-blueselected text-bluetext"
+                    : "bg-bluebg text-bluetext hover:bg-bluehover"
+                }`}
+              >
+                {tag}
+              </button>
+            ))
+          : actualPage == "maps"
+          ? tags.maps.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => handleTagClick(tag)}
+                className={`px-3 py-1 border-blueborder border-4 ${
+                  selectedTags.includes(tag)
+                    ? "bg-blueselected text-bluetext"
+                    : "bg-bluebg text-bluetext hover:bg-bluehover"
+                }
+                `}
+              >
+                {tag}
+              </button>
+            ))
+          : actualPage == "mods"
+          ? tags.addons.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => handleTagClick(tag)}
+                className={`px-3 py-1 border-blueborder border-4 ${
+                  selectedTags.includes(tag)
+                    ? "bg-blueselected text-bluetext"
+                    : "bg-bluebg text-bluetext hover:bg-bluehover"
+                }
+                `}
+              >
+                {tag}
+              </button>
+            ))
+          : null}
+
       </div>
     </div>
   );
