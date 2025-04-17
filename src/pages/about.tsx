@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-// grid grid-cols-[800px_800px]
+
 
 export default function AboutPage() {
   return (
