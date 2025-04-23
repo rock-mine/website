@@ -1,12 +1,12 @@
-<img src="./public/rocklogo.png" alt="Minha imagem legal" />
+![Logo do Rock Mine](./public/rocklogo.png)
 
-**Rock Mine** uma simples plataforma para baixar addons, texturas e mapas para Minecraft Bedrock. Criamos um ambiente moderno, rápido e seguro para a comunidade, com conteúdo mais fácil e confiável.
+**Rock Mine** é uma plataforma simples para baixar addons, texturas e mapas para Minecraft Bedrock. Criamos um ambiente moderno, rápido e seguro para a comunidade, oferecendo conteúdo de forma fácil e confiável.
 
 ## Tecnologias Utilizadas
 
-- ⚡ **NextJs** – Framework moderno para aplicações web rápidas e escaláveis.
-- 🔐 **NextAuth** – Autenticação segura e integrada.
-- 🎨 **TailwindCSS** – Estilização eficiente e responsiva.
+- ⚡ **Next.js** – Framework moderno para aplicações web rápidas e escaláveis.
+- 🔐 **NextAuth** – Sistema de autenticação seguro e integrado.
+- 🎨 **Tailwind CSS** – Estilização eficiente e responsiva.
 
 ## Recursos
 
@@ -16,13 +16,13 @@
 
 ## Metas
 
-- [x] **Pagina de addon**
+- [x] **Página de addon**
 - [x] **Sistema de login**
-- [x] **Resposividade**
-- [x] **Settings page**
-- [x] **Icons melhore**
-- [ ] **Abri para o publico** (Qualquer pode envia seu projeto ;D)
-- [ ] **Melhora desempenho**
+- [x] **Responsividade**
+- [x] **Página de configurações**
+- [x] **Melhora dos ícones**
+- [ ] **Abrir para o público** (Qualquer pessoa pode enviar seu projeto ;D)
+- [ ] **Melhorar desempenho**
 
 ## Como Usar
 
@@ -54,26 +54,26 @@ Siga os passos abaixo para rodar o projeto localmente:
    ```sh
    npm install
    ```
-4. Configure as variáveis de ambiente criando um arquivo `.env.local` com as credenciais necessárias seguindo o exemplo:
+4. Configure as variáveis de ambiente criando um arquivo `.env.local` com as credenciais necessárias, seguindo o exemplo:
 
-```env
-# Added by `npx auth`. Read more: https://cli.authjs.dev
-AUTH_SECRET=
+   ```env
+   # Adicionado por `npx auth`. Leia mais: https://cli.authjs.dev
+   AUTH_SECRET=
 
-# https://discord.com/developers/applications
-AUTH_DISCORD_ID=
-AUTH_DISCORD_SECRET=
+   # https://discord.com/developers/applications
+   AUTH_DISCORD_ID=
+   AUTH_DISCORD_SECRET=
 
-# https://supabase.com/
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-```
+   # https://supabase.com/
+   NEXT_PUBLIC_SUPABASE_URL=
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=
+   ```
 
 5. Inicie o servidor de desenvolvimento:
    ```sh
    npm run dev
    ```
-6. Acesse `http://localhost:3000` no navegador e pronto xD.
+6. Acesse `http://localhost:3000` no navegador.
 
 ## Contribuição
 
@@ -81,8 +81,8 @@ Quer ajudar a melhorar o Rock Mine? Fique à vontade para sugerir melhorias, rep
 
 ## Contato
 
-Se tiver alguma dúvida ou sugestão, entre em contato conosco:
+Se tiver dúvidas ou sugestões, entre em contato:
 
 - Discord: [Rock Mine - Official Server](https://discord.gg/W2JC6vQXYK)
 
-🌟 **Rock Mine – Um simples site de posta addons**
+🌟 **Rock Mine – O melhor lugar para encontrar addons!**
