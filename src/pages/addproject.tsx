@@ -24,6 +24,8 @@ import {
   TriangleAlert,
   YoutubeIcon,
   Loader,
+  Minus,
+  AlertCircle,
 } from "lucide-react";
 import Button from "src/components/Button";
 import { useRef, useState } from "react";
@@ -37,8 +39,8 @@ import { z } from "zod";
 
 const linkSchema = z.array(
   z.object({
-    link: z.string().min(10),
-    name: z.string().url(),
+    name: z.string().min(10),
+    link: z.string().url(),
   })
 );
 
@@ -462,7 +464,7 @@ export default function AddProject() {
           <div className="w-full max-w-2xl space-y-4">
             <h1 className="text-xl font-bold">Tags</h1>
             <div className="flex flex-wrap gap-2">
-              {tags.map((tag) => (
+              {tags.addons.map((tag) => (
                 <button
                   key={tag}
                   onClick={() => handleTagChange(tag)}
@@ -480,17 +482,30 @@ export default function AddProject() {
 
           {/* Links de Download */}
           <div className="w-full max-w-2xl space-y-4">
-            <h1 className="text-xl font-bold">Download Links</h1>
-            <div className="space-y-2">
+            <span className="flex relative gap-2 items-center justify-center">
+              {viewErro &&
+                (!downloads[0] ||
+                  (downloads[0] &&
+                    !linkSchema.safeParse(downloads[0]).success)) && (
+                  <div
+                    data-tooltip={`Needs at least one valid link`}
+                    className={`relative whitespace-nowrap w-fit h-fit after:content-[attr(data-tooltip)] after:absolute after:left-2/4 after:translate-x-[-50%] after:bottom-[100%] after:text-[13px] after:rounded-lg after:text-white after:invisible hover:after:visible`}
+                  >
+                    <AlertCircle className="text-red-400" />
+                  </div>
+                )}
+              <h1 className="text-xl font-bold">Download Links</h1>
+            </span>
+            <div className="space-y-2 justify-items-center">
               {downloads.map((download, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <Input
                     className={
                       viewErro &&
-                      z.string().min(10).safeParse(downloads[index].name)
+                      !z.string().min(10).safeParse(downloads[index].name)
                         .success
-                        ? ""
-                        : "border-2 border-red-500"
+                        ? "border-2 border-red-500"
+                        : ""
                     }
                     value={download.name}
                     onChange={(e) => {
@@ -503,9 +518,9 @@ export default function AddProject() {
                   <Input
                     className={
                       viewErro &&
-                      z.string().url().safeParse(downloads[index].link).success
-                        ? ""
-                        : "border-2 border-red-500"
+                      !z.string().url().safeParse(downloads[index].link).success
+                        ? "border-2 border-red-500"
+                        : ""
                     }
                     value={download.link}
                     onChange={(e) => {
@@ -515,22 +530,19 @@ export default function AddProject() {
                     }}
                     placeholder="Download Link"
                   />
-                  <button
+                  <Button
                     onClick={() => handleRemoveDownload(index)}
-                    className="bg-black/30 border-2 border-bluetext hover:bg-red-600/30 rounded-md text-white px-2 py-2"
+                    className="border-3 p-0 h-10 w-10 border-red-400"
                   >
-                    Remove
-                  </button>
+                    <Minus />
+                  </Button>
                 </div>
               ))}
             </div>
-            <button
-              onClick={handleAddDownload}
-              className="flex items-center justify-center space-x-2 bg-black/30 border-2 border-bluetext hover:bg-bluehover/40 rounded-md text-white px-1 py-1"
-            >
-              <span>Add Download Link</span>
-              <PlusIcon size={16} />
-            </button>
+            <Button onClick={handleAddDownload} className="gap-2 px-1 py-0">
+              <p className="pl-1">Add Download Link</p>
+              <PlusIcon size={30} />
+            </Button>
           </div>
 
           {/* Botão de Envio */}
@@ -540,10 +552,11 @@ export default function AddProject() {
                 if (startSucess) return;
                 setViewErro(true);
                 if (
+                  downloads[0] &&
+                  data.name &&
                   addonSchema.safeParse(data).success &&
                   linkSchema.safeParse(downloads).success
                 ) {
-                  if (!data.name) return;
                   setStartSucess(true);
                   await addon.addAddon(
                     {

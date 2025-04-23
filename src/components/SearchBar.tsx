@@ -1,11 +1,12 @@
 import tags from "@/extras/tags.json";
-import { useSearchParams } from "next/navigation";
 export default function SearchBar({
   query,
   setQuery,
   selectedTags,
   setSelectedTags,
+  actualPage,
 }: {
+  actualPage: number;
   query: string;
   setQuery: (value: string) => void;
   selectedTags: string[];
@@ -24,9 +25,6 @@ export default function SearchBar({
         : [...prevTags, tag]
     );
   };
-  const searchParams = useSearchParams();
-
-  const actualPage = searchParams.get("page");
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <div className="max-w-[500px] w-full flex p-3">
@@ -40,7 +38,7 @@ export default function SearchBar({
         </div>
       </div>
       <div className="flex flex-wrap gap-2 mt-2 items-center justify-center">
-        {actualPage == "textures"
+        {actualPage == 2
           ? tags.textures.map((tag) => (
               <button
                 key={tag}
@@ -54,7 +52,7 @@ export default function SearchBar({
                 {tag}
               </button>
             ))
-          : actualPage == "maps"
+          : actualPage == 1
           ? tags.maps.map((tag) => (
               <button
                 key={tag}
@@ -69,7 +67,7 @@ export default function SearchBar({
                 {tag}
               </button>
             ))
-          : actualPage == "mods"
+          : actualPage == 0
           ? tags.addons.map((tag) => (
               <button
                 key={tag}
@@ -85,7 +83,6 @@ export default function SearchBar({
               </button>
             ))
           : null}
-
       </div>
     </div>
   );

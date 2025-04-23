@@ -26,7 +26,7 @@ export default function Button({
   const commonClasses = twMerge(
     `hover:shadow-hovershadow shadow-blueshadow shadow-xl
      hover:text-bluetext transition-colors duration-300
-     border-4 border-blueborder text-center p-2 px-4
+     border-4 border-blueborder text-center py-2 px-4
      font-bold flex flex-grow justify-center items-center
      ${active ? "bg-blueselected" : "bg-black/20 bg-bluebg"}`,
     className || ""

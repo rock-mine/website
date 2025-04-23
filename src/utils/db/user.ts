@@ -7,16 +7,16 @@ export default function Main(supabase: SupabaseClient) {
       // delete opts?.avatar;
       const { data } = await supabase
         .from("users")
-        .insert({ role: "", ...opts })
+        .insert({ ...opts, role: " " })
         .select();
 
       return data;
     },
     async findUser(name: string, value: string): Promise<User> {
       const { data } = await supabase.from("users").select().eq(name, value);
-      return data ? data[0] : {};
+      return data ? data[0] : ({} as User);
     },
-    async updateUser(id: string, newValue: User) {
+    async updateUser(id: string, newValue: object | User | undefined) {
       await supabase.from("users").update(newValue).eq("id", id);
     },
   };

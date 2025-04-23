@@ -9,7 +9,7 @@ import { useFilePicker } from "use-file-picker";
 import type { User } from "types";
 export default function Page() {
   const { data: session } = useSession();
-  const [data, setData] = useState<User>({});
+  const [data, setData] = useState<User>();
 
   const { openFilePicker: openFilePickerAvatar, filesContent: fileAvatar } =
     useFilePicker({
@@ -103,7 +103,7 @@ export default function Page() {
         />
         <span
           onClick={() => openFilePickerBanner()}
-          className="absolute hover:bg-[#0b090e]/70 duration-150 rounded-full p-4 right-4 top-5"
+          className="absolute hover:bg-white/30 duration-150 rounded-full p-4 right-4 top-5"
         >
           <Pencil size={32} />
         </span>
@@ -135,10 +135,13 @@ export default function Page() {
                   className="text-[40px] outline-none relative w-[500px] sm:w-[450px]"
                   defaultValue={session?.user?.display_name}
                   onChange={(e) =>
-                    setData((baseData) => ({
-                      ...baseData,
-                      display_name: e.target.value,
-                    }))
+                    setData(
+                      (baseData) =>
+                        ({
+                          ...baseData,
+                          display_name: e.target.value,
+                        } as User)
+                    )
                   }
                 />
                 <h1 className="text-[17px] text-zinc-500">
@@ -170,10 +173,13 @@ export default function Page() {
                 className="resize-none outline-none w-full h-full p-4"
                 defaultValue={session?.user?.bio}
                 onChange={(e) =>
-                  setData((baseData) => ({
-                    ...baseData,
-                    bio: e.target.value,
-                  }))
+                  setData(
+                    (baseData) =>
+                      ({
+                        ...baseData,
+                        bio: e.target.value,
+                      } as User)
+                  )
                 }
               />
             </div>

@@ -1,13 +1,13 @@
 export type User = {
-  id?: string;
-  bio?: string;
-  banner?: string;
-  image?: string;
-  name?: string;
-  display_name?: string;
-  role?: string;
-  email?: string;
-  likes_posts?: string[];
+  id: string;
+  bio: string;
+  banner: string;
+  image: string;
+  name: string;
+  display_name: string;
+  role: string;
+  email: string;
+  likes_posts: string[];
 };
 
 /*
@@ -31,4 +31,5 @@ export type Addon = {
   likes: number;
   downloads: { name: string; link: string; url: string }[];
   author: string;
+  images: string[];
 };

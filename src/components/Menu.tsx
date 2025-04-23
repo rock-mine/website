@@ -57,12 +57,6 @@ const Menu = () => {
               </button>
             )}
             <Link
-              href="/settings"
-              className="text-gray-300 hover:text-bluetext bg-gray-500/5 transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md"
-            >
-              Settings
-            </Link>
-            <Link
               href="/about"
               className="text-gray-300 hover:text-bluetext bg-gray-500/5 transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md"
             >
@@ -128,12 +122,6 @@ const Menu = () => {
               className="block text-gray-500 hover:text-bluetext  hover:bg-bluehover/20 px-3 py-2 rounded-md transition-colors"
             >
               {session?.user ? "*+ Profile +*" : "*+ Login +*"}
-            </Link>
-            <Link
-              href="/settings"
-              className="block text-gray-500 hover:text-bluetext  hover:bg-bluehover/20 px-3 py-2 rounded-md transition-colors"
-            >
-              *+ Settings +*
             </Link>
             <Link
               href="/about"

@@ -1,6 +1,7 @@
 import NextAuth, { type AuthOptions } from "next-auth";
 import { supabase, user } from "./db";
 import Discord from "next-auth/providers/discord";
+import type { User } from "types";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -49,10 +50,10 @@ export const authOptions: AuthOptions = {
             name: session.user.name.toLowerCase(),
             display_name: session.user.name,
             email: session.user.email,
-          });
+          } as User);
           session.user.id = session.user.email;
           session.user.display_name = session.user.name;
-          delete session.user.image;
+          //  if (session.user.image) delete session.user.image;
           session.user.role = "";
         } else {
           Object(session).user = userFind;
