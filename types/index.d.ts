@@ -10,12 +10,7 @@ export type User = {
   likes_posts: string[];
 };
 
-/*
-@params Addon
-        status = 100 = "Aprovado"
-                 200 = "Enviado"
-                 300 = "Recusado"
-*/
+
 
 export type Addon = {
   data_post: number;
