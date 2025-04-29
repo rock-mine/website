@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSanitize from "rehype-sanitize";
-import "highlight.js/styles/github-dark.css";
+import "highlight.js";
 
 interface MarkdownRendererProps {
   content: string;

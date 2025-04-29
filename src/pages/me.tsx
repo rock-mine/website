@@ -168,9 +168,8 @@ export default function Page() {
                 </div>
               )}
             </div>
-            <div className="absolute top-30 -left-10 max-w md:relative md:mx-auto md:top-2 md:h-[200px] rounded-md bg-[#0e0d11] md:w-[90%] border-2 border-white/20">
               <textarea
-                className="resize-none outline-none w-full h-full p-4"
+              className="relative top-0 -left-10 max-w md:relative md:mx-auto md:top-2 h-[300px] md:h-[400px] rounded-md bg-[#0e0d11] w-[90%] border-2 border-white/20 resize-none outline-none p-4"
                 defaultValue={session?.user?.bio}
                 onChange={(e) =>
                   setData(
@@ -182,8 +181,7 @@ export default function Page() {
                   )
                 }
               />
-            </div>
-            <div className="relative flex mt-30 -left-[20%] md:mt-5 space-x-8 w-full md:left-0 md:w-[800px]">
+            <div className="relative flex mt-10 -left-[20%] md:mt-5 space-x-8 w-full md:left-0 md:w-[800px]">
               <button
                 className="text-gray-300 hover:text-bluetext bg-bluebg transition-colors hover:bg-bluehover/20 px-3 py-2 rounded-md border-2 border-blueborder"
                 onClick={() => signOut()}
