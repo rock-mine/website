@@ -211,7 +211,7 @@ export default function Page({
       </div>
 
       <div className="max-w-6xl w-full sm:px-4 mt-8">
-        <div className="flex sm:grid gap-3 border-b-2 border-blueborder pb-2">
+        <div className="grid md:flex gap-3 border-b-2 border-blueborder pb-2">
           <Button isActive={actualPage === 0} onClick={() => setActualPage(0)}>
             <BookA className="mr-2 h-4 w-4" />
             Description

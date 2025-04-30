@@ -15,7 +15,7 @@ export default function AboutPage() {
           About Us
         </h1>
 
-        <div className="flex flex-col md:grid md:grid-cols-[400px_400px] items-center justify-center gap-8 p-4">
+        <div className="flex flex-col md:grid md:grid-cols-[400px_400px] items-center justify-center gap-8 md:p-4">
           <div className="relative flex flex-col items-center bg-black/40 p-6 h-[360px] w-[400px] rounded-lg shadow-lg hover:shadow-hovershadow transition-shadow">
             <Image
               width={100}

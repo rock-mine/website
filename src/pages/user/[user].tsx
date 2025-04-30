@@ -47,7 +47,6 @@ export default function Page({ user }: { user: User }) {
           src={`/api/image/${user?.name}-banner`}
           className="aspect-3/2 object-cover h-[240px] w-full"
         />
-
         <span className="flex space-x-6 relative -top-20 w-full">
           <Image
             className="object-cover ml-4 h-[140px] w-[140px] rounded-full"
@@ -89,13 +88,11 @@ export default function Page({ user }: { user: User }) {
                 </div>
               )}
             </div>
-            <div className="absolute top-30 overflow-y-auto -left-10 max-h-[800px] max-w md:relative md:mx-auto md:top-2 md:max-h-[200px] rounded-md bg-[#0e0d11] md:w-[90%] border-2 border-white/20">
-              <div className="resize-none outline-none w-full h-full p-4 text-start">
-                {user.bio}
-              </div>
-            </div>
           </div>
         </span>
+        <div className="relative mx-auto -top-10 md:-top-20 p-4 rounded-md bg-[#0e0d11] w-[90%] border-2 border-white/20">
+          {user.bio}
+        </div>
       </div>
     </main>
   );
