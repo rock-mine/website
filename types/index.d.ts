@@ -26,5 +26,5 @@ export type Addon = {
   likes: number;
   downloads: { name: string; link: string; url: string }[];
   author: string;
-  images: string[];
+    gallery: { name: string; url: string }[];
 };

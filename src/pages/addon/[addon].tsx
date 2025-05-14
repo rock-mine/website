@@ -18,6 +18,7 @@ import type { Addon, User } from "types";
 import Head from "next/head";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import { useState, useEffect } from "react";
+import { link } from "fs";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
@@ -81,7 +82,7 @@ export default function Page({
         });
       }
     } catch (error) {
-      // Revert on error
+      
       setVote(previousVote);
       setLike(previousLikes);
       console.error("Failed to update like:", error);
@@ -111,7 +112,7 @@ export default function Page({
       <div className="h-16 sm:h-20 w-full" aria-hidden />
 
       <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Left Column */}
+       
         <div className="flex flex-col items-center w-full lg:items-start">
           <div className="border-3 border-blueborder shadow-lg overflow-hidden w-full aspect-video relative">
             <Image
@@ -130,7 +131,7 @@ export default function Page({
           </div>
         </div>
 
-        {/* Right Column */}
+       
         <div className="lg:col-span-2 flex flex-col gap-4 w-full">
           <div className="bg-black/20 p-6 rounded-lg border-4 border-blueborder">
             <h1 className="text-3xl font-bold text-bluetext">{addon.name}</h1>
@@ -177,7 +178,7 @@ export default function Page({
             )}
           </div>
 
-          {/* Action Buttons */}
+         
           <div className="grid grid-cols-3 gap-3">
             <Button
               className="flex items-center justify-center gap-2 py-2 text-sm"
@@ -210,8 +211,8 @@ export default function Page({
         </div>
       </div>
 
-      <div className="max-w-6xl w-full sm:px-4 mt-8">
-        <div className="grid md:flex gap-3 border-b-2 border-blueborder pb-2">
+      <div className="max-w-6xl w-full px-4 mt-8">
+        <div className="flex gap-3 border-b-2 border-blueborder pb-2">
           <Button isActive={actualPage === 0} onClick={() => setActualPage(0)}>
             <BookA className="mr-2 h-4 w-4" />
             Description
@@ -228,7 +229,7 @@ export default function Page({
           </Button>
         </div>
 
-        {/* Content Sections */}
+      
         <div className="mt-6">
           {actualPage === 0 && (
             <MarkdownRenderer
@@ -254,30 +255,45 @@ export default function Page({
           )}
 
           {actualPage === 2 && (
-            <div className="bg-black/20 p-6 rounded-lg">
-              <h2 className="text-2xl font-bold mb-4">Gallery</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {addon?.images ? (
-                  addon.images.map((image, index) => (
-                    <div
-                      key={index}
-                      className="relative aspect-video rounded-lg overflow-hidden border-2 border-blueborder"
-                    >
-                      <Image
-                        fill
-                        src={image}
-                        alt={`${addon.name} screenshot ${index + 1}`}
-                        className="object-cover"
-                        quality={85}
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-400">No images available.</p>
-                )}
-              </div>
+  <div className="bg-black/20 p-6 rounded-lg">
+    <h2 className="text-2xl font-bold mb-6 text-bluetext">Gallery</h2>
+    
+    {addon.gallery?.length > 0 ? (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {addon.gallery?.map((image, index) => (
+          <div
+            key={index}
+            className="group relative aspect-video rounded-xl overflow-hidden border-2 border-blueborder transition-all duration-300 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/20"
+          >
+            <Image
+              fill
+              src={image?.url}
+              alt={`${addon.name} screenshot ${image?.name}`}
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              quality={90}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+              <span className="text-white font-medium">Image {image?.name}</span>
             </div>
-          )}
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3].map((item) => (
+          <div
+            key={item}
+            className="group relative aspect-video rounded-xl overflow-hidden border-2 border-dashed border-blueborder/50 flex flex-col items-center justify-center bg-blueborder/10 transition-all duration-300 hover:border-purple-400"
+          >
+            <ImagesIcon className="h-12 w-12 text-blueborder/50 mb-2" />
+            <span className="text-blueborder/50 font-medium">No image available</span>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+)}
         </div>
       </div>
     </section>

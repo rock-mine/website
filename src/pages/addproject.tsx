@@ -44,6 +44,13 @@ const linkSchema = z.array(
   })
 );
 
+const imageSchema = z.array(
+  z.object({
+    name: z.string().min(5),
+    url: z.string().url(),
+  })
+);
+
 const addonSchema = z.object({
   name: z.string().min(4),
   short_description: z.string().min(10),
@@ -58,6 +65,7 @@ type AddonBaseConfig = {
   logo?: string;
   tags?: string[];
   downloads?: { name: string; link: string }[];
+  gallery?: { name: string; url: string }[];
 };
 
 export default function AddProject() {
@@ -68,11 +76,11 @@ export default function AddProject() {
   const [viewSucessSend, setSendSucess] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [downloads, setDownloads] = useState<{ name: string; link: string }[]>(
-    []
-  );
+  const [downloads, setDownloads] = useState<{ name: string; link: string }[]>([]);
+  const [galleryImages, setGalleryImages] = useState<{ name: string; url: string }[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // File picker for logo
   const { openFilePicker, filesContent } = useFilePicker({
     readAs: "DataURL",
     accept: "image/*",
@@ -86,42 +94,62 @@ export default function AddProject() {
     },
   });
 
-  // Função para validar URLs do YouTube
-  /*const isValidYouTubeUrl = (url: string): boolean => {
-    const youtubeDomains = [
-      "www.youtube.com",
-      "youtube.com",
-      "youtu.be",
-      "www.youtu.be",
-    ];
-    try {
-      const parsedUrl = new URL(url);
-      return youtubeDomains.includes(parsedUrl.hostname);
-    } catch (_) {
-      return false; // URL inválida
-    }
-  };*/
+  // File picker for gallery images
+  const { openFilePicker: openGalleryPicker } = useFilePicker({
+    readAs: "DataURL",
+    accept: "image/*",
+    multiple: true,
+    maxFileSize: 5, // 5MB
+    validators: [
+    ],
+    onFilesSuccessfullySelected: ({ filesContent }) => {
+      const newImages = [...galleryImages];
+      filesContent.forEach((file, index) => {
+        if (!newImages[index]) {
+          newImages[index] = { name: "", url: file.content };
+        } else {
+          newImages[index].url = file.content;
+        }
+      });
+      setGalleryImages(newImages);
+    },
+  });
+
+  // Gallery image functions
+  const handleAddGalleryImage = () => {
+    if (galleryImages.length >= 12) return;
+    setGalleryImages([...galleryImages, { name: "", url: "" }]);
+  };
+
+  const handleRemoveGalleryImage = (index: number) => {
+    setGalleryImages(galleryImages.filter((_, i) => i !== index));
+  };
+
+  const handleGalleryImageChange = (index: number, field: 'name' | 'url', value: string) => {
+    const newImages = [...galleryImages];
+    newImages[index][field] = value;
+    setGalleryImages(newImages);
+  };
 
   const convertToYouTubeEmbedUrl = (url: string): string | null => {
     try {
       const parsedUrl = new URL(url);
-      const videoId = parsedUrl.searchParams.get("v"); // Extrai o ID do vídeo
+      const videoId = parsedUrl.searchParams.get("v");
       if (videoId) {
-        return `https://www.youtube.com/embed/${videoId}`; // Retorna a URL de embed
+        return `https://www.youtube.com/embed/${videoId}`;
       } else if (parsedUrl.hostname.includes("youtu.be")) {
-        // Para URLs encurtadas (youtu.be)
         return `https://www.youtube.com/embed${parsedUrl.pathname}`;
       }
-      return null; // URL inválida
+      return null;
     } catch (e) {
-      return e ? null : "";
+      return null;
     }
   };
 
   const addYouTubeIframe = () => {
     const url = prompt("Digite a URL do vídeo do YouTube:");
     if (url) {
-      const embedUrl = convertToYouTubeEmbedUrl(url); // Converte para embed
+      const embedUrl = convertToYouTubeEmbedUrl(url);
       if (embedUrl) {
         const iframeMarkdown = `<iframe src="${embedUrl}" title="YouTube video player" sandbox="allow-scripts allow-same-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" class="w-full h-64 border-none rounded-md my-4"></iframe>`;
         applyFormatting(iframeMarkdown, "");
@@ -131,7 +159,6 @@ export default function AddProject() {
     }
   };
 
-  // Função para aplicar formatação
   const applyFormatting = (prefix: string, suffix: string = prefix) => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -156,7 +183,6 @@ export default function AddProject() {
     }, 0);
   };
 
-  // Funções de formatação
   const addLink = () => {
     const url = prompt("Digite a URL:");
     if (url) {
@@ -199,13 +225,11 @@ export default function AddProject() {
   };
 
   const handleAddDownload = () => {
-    setDownloads((prevDownloads) => [...prevDownloads, { name: "", link: "" }]);
+    setDownloads([...downloads, { name: "", link: "" }]);
   };
 
   const handleRemoveDownload = (index: number) => {
-    setDownloads((prevDownloads) =>
-      prevDownloads.filter((_, i) => i !== index)
-    );
+    setDownloads(downloads.filter((_, i) => i !== index));
   };
 
   return (
@@ -316,14 +340,12 @@ export default function AddProject() {
               </Button>
             </div>
             {isPreview ? (
-              // Preview do Markdown
               <div className="w-full h-96 border-4 border-blueborder p-4 overflow-y-auto bg-black/10">
                 <MarkdownRenderer
                   content={data?.description || "## Preview will appear here"}
                 />
               </div>
             ) : (
-              // Caixa de Descrição
               <div className="w-full">
                 <div
                   className={`flex h-10 border-4 border-blueborder ${
@@ -333,7 +355,6 @@ export default function AddProject() {
                       : ""
                   }`}
                 >
-                  {/* Botões de formatação */}
                   <button
                     className="p-1 hover:bg-bluehover/80"
                     onClick={() => applyFormatting("**")}
@@ -545,6 +566,92 @@ export default function AddProject() {
             </Button>
           </div>
 
+          {/* Galeria de Imagens */}
+          <div className="w-full max-w-2xl space-y-4">
+            <span className="flex relative gap-2 items-center justify-center">
+              {viewErro && galleryImages.length > 0 && !imageSchema.safeParse(galleryImages).success && (
+                <div
+                  data-tooltip={`Image names must be at least 5 characters and URLs must be valid`}
+                  className={`relative whitespace-nowrap w-fit h-fit after:content-[attr(data-tooltip)] after:absolute after:left-2/4 after:translate-x-[-50%] after:bottom-[100%] after:text-[13px] after:rounded-lg after:text-white after:invisible hover:after:visible`}
+                >
+                  <AlertCircle className="text-red-400" />
+                </div>
+              )}
+              <h1 className="text-xl font-bold">Gallery Images (Max 12)</h1>
+              <span className="text-sm text-gray-500">
+                {galleryImages.length}/12
+              </span>
+            </span>
+            <div className="space-y-2">
+              {galleryImages.map((image, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <div className="flex-1 grid grid-cols-2 gap-2">
+                    <Input
+                      value={image.name}
+                      onChange={(e) => handleGalleryImageChange(index, 'name', e.target.value)}
+                      placeholder="Image title"
+                      className={viewErro && !z.string().min(5).safeParse(image.name).success ? "border-red-500" : ""}
+                    />
+                    <div className="flex gap-2">
+                      <Input
+                        value={image.url}
+                        onChange={(e) => handleGalleryImageChange(index, 'url', e.target.value)}
+                        placeholder="Image URL"
+                        className={viewErro && !z.string().url().safeParse(image.url).success ? "border-red-500" : ""}
+                      />
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          const inputIndex = index;
+                          openGalleryPicker();
+                        }}
+                        className="whitespace-nowrap"
+                      >
+                        Upload
+                      </Button>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => handleRemoveGalleryImage(index)}
+                    className="border-3 p-0 h-10 w-10 border-red-400"
+                  >
+                    <Minus />
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <Button
+              onClick={handleAddGalleryImage}
+              disabled={galleryImages.length >= 12}
+              className="gap-2 px-1 py-0"
+            >
+              <p className="pl-1">Add Gallery Image</p>
+              <PlusIcon size={30} />
+            </Button>
+
+            {/* Pré-visualização da galeria */}
+            {galleryImages.length > 0 && (
+              <div className="grid grid-cols-3 gap-2 mt-4">
+                {galleryImages.map((image, index) => (
+                  image.url && (
+                    <div key={index} className="relative group">
+                      <img
+                        src={image.url}
+                        alt={image.name || `Gallery image ${index + 1}`}
+                        className="w-full h-24 object-cover rounded border border-gray-200"
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <span className="text-white text-xs text-center p-1 truncate w-full">
+                          {image.name}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Botão de Envio */}
           <div className="w-full max-w-2xl">
             <Button
@@ -555,7 +662,8 @@ export default function AddProject() {
                   downloads[0] &&
                   data.name &&
                   addonSchema.safeParse(data).success &&
-                  linkSchema.safeParse(downloads).success
+                  linkSchema.safeParse(downloads).success &&
+                  (galleryImages.length === 0 || imageSchema.safeParse(galleryImages).success)
                 ) {
                   setStartSucess(true);
                   await addon.addAddon(
@@ -566,6 +674,7 @@ export default function AddProject() {
                       tags: selectedTags.join(", "),
                       status: 100,
                       downloads: downloads,
+                      gallery: galleryImages,
                     } as Addon,
                     session?.user.email as string
                   );

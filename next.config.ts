@@ -7,6 +7,10 @@ export default {
       },
       {
         protocol: "https",
+        hostname: "r2.mcpedl.com",
+      },
+      {
+        protocol: "https",
         hostname: "cdn.discordapp.com",
       },
       {
